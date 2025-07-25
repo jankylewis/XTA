@@ -1,14 +1,15 @@
 using Microsoft.Playwright;
 using XTAPlaywright.XConfFactories.XConfFactories;
 using XTAPlaywright.XConfFactories.XConfModels;
+using XTAPlaywright.XExceptions;
 using XTAPlaywright.XPlwCircle;
 using XTAPlaywright.XPlwCircle.XPlwAdapter;
 using XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableModels;
 using XTAPlaywright.XTestCircle;
 
-namespace XTAClient.XTATests;
+namespace XTAClient.XTATests.XTATestFoundation;
 
-internal abstract class AXTATestFoundation
+internal abstract partial class AXTATestFoundation
 {
     #region Introduce foundational vars
     
@@ -22,7 +23,7 @@ internal abstract class AXTATestFoundation
     
     private string m_testMethodKey => TestContext.CurrentContext.Test.MethodName;
     protected IPage p_xPage => _TakeCurrentXPage();
-    protected IBrowserContext p_xBrContext => _TakeCurrentBrowserContext();
+    protected IBrowserContext p_xBrContext => _TakeCurrentXBrowserContext();
     
     private static readonly AsyncLocal<IXTestAdapter> msr_xTestAdapter = new();
     private static XPlwAdapterModel ms_xPlwAdapterModel;
@@ -55,15 +56,15 @@ internal abstract class AXTATestFoundation
     {
         msr_xTestAdapter.Value = new XTestAdapter()
             .ProduceXTestAdapter(
-                m_testMethodKey ?? throw new Exception("Test Method Name might got empty     "), 
+                m_testMethodKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "), 
                 ms_xPlaywrightConfModel.BrowserType
                 );
 
-        msr_xPlwMultiCoreCableModel.Value = 
-            await ms_xPlwEngineer.GenXPlwMultiCoreCableModelAsync(ms_xPlwSingleCoreCableModel.XBrowser);
+        msr_xPlwMultiCoreCableModel.Value 
+            = await ms_xPlwEngineer.GenXPlwMultiCoreCableModelAsync(ms_xPlwSingleCoreCableModel.XBrowser);
 
-        ms_xPlwAdapterModel = 
-            ms_xPlwEngineer.PlugXMultiCoreCableIntoXAdapter(msr_xTestAdapter.Value, msr_xPlwMultiCoreCableModel.Value, ms_xPlwAdapterModel);
+        ms_xPlwAdapterModel 
+            = ms_xPlwEngineer.PlugXMultiCoreCableIntoXAdapter(msr_xTestAdapter.Value, msr_xPlwMultiCoreCableModel.Value, ms_xPlwAdapterModel);
     }
 
     #endregion Introduce NUnit SetUp phase
@@ -86,12 +87,14 @@ internal abstract class AXTATestFoundation
     private IPage _TakeCurrentXPage() 
         => ms_xPlwAdapterModel.XPages.TryGetValue(m_testMethodKey, out IPage a_xPage) 
             ? a_xPage 
-            : throw new InvalidOperationException($"Page not initialized for test method '{m_testMethodKey}'");
+            : throw new XPageNotInitializedException(
+                $"Page not initialized for test method '{m_testMethodKey}'");
     
-    private IBrowserContext _TakeCurrentBrowserContext()
+    private IBrowserContext _TakeCurrentXBrowserContext()
         => ms_xPlwAdapterModel.XBrowserContexts.TryGetValue(m_testMethodKey, out IBrowserContext a_xBrContext)
             ? a_xBrContext
-            : throw new InvalidOperationException($"Browser Context not initialized for test method '{m_testMethodKey}'");
+            : throw new XBrowserContextNotInitializedException(
+                $"Browser Context not initialized for test method '{m_testMethodKey}'");
     
     #endregion Introduce private services
 }

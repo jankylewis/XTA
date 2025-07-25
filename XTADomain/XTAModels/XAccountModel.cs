@@ -1,6 +1,6 @@
 namespace XTADomain.XTAModels;
 
-internal class XAccountModel
+public class XAccountModel
 {
     public String XUsername { get; set; }
     public String XPassword { get; set; }

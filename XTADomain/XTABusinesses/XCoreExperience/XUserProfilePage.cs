@@ -23,15 +23,15 @@ public class XUserProfilePage : AXPage
     public async Task VerifyDisplayNameShownCorrectlyAsync(String in_expectedXDisplayName)
     {
         await pr_xtaWebUIWaitStrategies
-            .WaitForElementToBeVisible(p_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
+            .WaitForElementToBeVisibleAsync(p_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
         
         await pr_xtaWebUISharedVerifiers
-            .VerifyIfElementIsVisibleWithoutWaits(p_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
+            .VerifyIfElementIsVisibleWithoutWaitsAsync(p_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
     }
 
     public async Task VerifyUsernameShownCorrectlyAsync(String in_expectedXUsername) 
         => await pr_xtaWebUISharedVerifiers
-            .VerifyIfElementIsVisibleWithoutWaits(p_xPage, mr_xUserProfilePOs.LBL_USERNAME(in_expectedXUsername));
+            .VerifyIfElementIsVisibleWithoutWaitsAsync(p_xPage, mr_xUserProfilePOs.LBL_USERNAME(in_expectedXUsername));
     
     #endregion Introduce actions
 }

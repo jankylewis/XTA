@@ -28,8 +28,8 @@ public class XSignInToXModal : AXModal
 
     public async Task VerifyIfSignInToXModalDisplayedAsync()
     {
-        await pr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithWaits(p_xPage, mr_xSignInToXMOs.LBL_HEADING);
-        await pr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithWaits(p_xPage, mr_xSignInToXMOs.BTN_SIGN_IN_WITH_APPLE);
+        await pr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithWaitsAsync(p_xPage, mr_xSignInToXMOs.LBL_HEADING);
+        await pr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithWaitsAsync(p_xPage, mr_xSignInToXMOs.BTN_SIGN_IN_WITH_APPLE);
     }
     
     #endregion Introduce actions
