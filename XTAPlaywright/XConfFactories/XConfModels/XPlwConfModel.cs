@@ -1,6 +1,6 @@
-namespace XTAPlaywright.XConfHandler;
+namespace XTAPlaywright.XConfFactories.XConfModels;
 
-public class XPlaywrightConfModel
+public class XPlwConfModel
 {
     public string BrowserType { get; set; }
     public bool Headed { get; set; }

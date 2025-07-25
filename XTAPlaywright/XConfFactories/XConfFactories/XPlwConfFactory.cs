@@ -1,13 +1,14 @@
+using XTAPlaywright.XConfFactories.XConfModels;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace XTAPlaywright.XConfHandler;
+namespace XTAPlaywright.XConfFactories.XConfFactories;
 
-public class XPlaywrightConfHandler
+public class XPlwConfFactory
 {
     private const String m_PLAYWRIGHT_CONF_PATH = "XTAClientConfigs/plw_confs.yaml";
 
-    public static XPlaywrightConfModel s_LoadPlaywrightConfModel(string in_playwrightConfPath = m_PLAYWRIGHT_CONF_PATH)
+    public static XPlwConfModel s_LoadPlaywrightConfModel(string in_playwrightConfPath = m_PLAYWRIGHT_CONF_PATH)
     {
         String plwConfYAMLContent = File.ReadAllText(in_playwrightConfPath);
 
@@ -15,6 +16,6 @@ public class XPlaywrightConfHandler
             .WithNamingConvention(PascalCaseNamingConvention.Instance)
             .Build();
 
-        return deserializer.Deserialize<XPlaywrightConfModel>(plwConfYAMLContent);
+        return deserializer.Deserialize<XPlwConfModel>(plwConfYAMLContent);
     }
 }

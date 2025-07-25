@@ -1,8 +1,8 @@
 using Microsoft.Playwright;
-using XTAPlaywright.XConfHandler;
+using XTAPlaywright.XConfFactories.XConfFactories;
+using XTAPlaywright.XConfFactories.XConfModels;
 using XTAPlaywright.XPlaywrightCircle;
 using XTAPlaywright.XTestCircle;
-using ViewportSize = XTAPlaywright.XConfHandler.ViewportSize;
 
 namespace XTAClient.XTATests.Abstractions;
 
@@ -17,7 +17,7 @@ internal abstract class AXTATestFoundation
         throw new InvalidOperationException($"Page not initialized for test method '{m_xTestAdapter.XTestMetaKey}'");
 
     protected static XAppConfModel prot_xAppConfModel;
-    private static XPlaywrightConfModel m_xPlaywrightConfModel;
+    private static XPlwConfModel m_xPlaywrightConfModel;
 
     private IXTestAdapter m_xTestAdapter;
 
@@ -32,8 +32,8 @@ internal abstract class AXTATestFoundation
     [OneTimeSetUp]
     public static async Task XAlphaSetUp()
     {
-        m_xPlaywrightConfModel = XPlaywrightConfHandler.s_LoadPlaywrightConfModel();
-        prot_xAppConfModel = XAppConfHandler.s_LoadXAppConfModel();
+        m_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlaywrightConfModel();
+        prot_xAppConfModel = XAppConfFactory.s_LoadXAppConfModel();
         
         m_xPlaywrightPowerSource = new XPlaywrightPowerSource(m_xPlaywrightConfModel);
         //

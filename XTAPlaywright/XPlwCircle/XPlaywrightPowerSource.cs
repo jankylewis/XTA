@@ -1,5 +1,5 @@
 using Microsoft.Playwright;
-using XTAPlaywright.XConfHandler;
+using XTAPlaywright.XConfFactories.XConfModels;
 using XTAPlaywright.XTestCircle;
 using ViewportSize = Microsoft.Playwright.ViewportSize;
 
@@ -9,14 +9,14 @@ public class XPlaywrightPowerSource : IAsyncDisposable
 {
     #region Introduce constructors
     
-    public XPlaywrightPowerSource(XPlaywrightConfModel in_xPlaywrightConfModel) 
+    public XPlaywrightPowerSource(XPlwConfModel in_xPlaywrightConfModel) 
         => m_X_PLW_CONF_MODEL = in_xPlaywrightConfModel;
 
     #endregion Introduce constructors
     
     #region Introduce vars
     
-    private readonly XPlaywrightConfModel m_X_PLW_CONF_MODEL;
+    private readonly XPlwConfModel m_X_PLW_CONF_MODEL;
 
     private XPlaywrightAdapter m_xPlaywrightAdapter;
     

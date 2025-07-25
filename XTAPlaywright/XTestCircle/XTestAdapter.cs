@@ -14,13 +14,13 @@ public class XTestAdapter : IXTestAdapter
         {
             nameof(EBrowserType.CHROME) => "chr",
             nameof(EBrowserType.FIREFOX) => "ff",
-
+    
             _ => throw new Exception($"$Unsupport the browser type {in_browserType}")
         };
-
+    
         XTestMetaKey = in_testMethodName;
         XTestCorrelationID = $"{browserPrefix}_{new XRandomUtils().GenGuid()}";
-
+    
         return this;
     }
 }

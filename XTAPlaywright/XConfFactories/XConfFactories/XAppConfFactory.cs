@@ -1,9 +1,10 @@
+using XTAPlaywright.XConfFactories.XConfModels;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace XTAPlaywright.XConfHandler;
+namespace XTAPlaywright.XConfFactories.XConfFactories;
 
-public class XAppConfHandler
+public class XAppConfFactory
 {
     private const String m_X_CONFS_PATH = "XTAClientConfigs/xta_app_confs.yaml";
 

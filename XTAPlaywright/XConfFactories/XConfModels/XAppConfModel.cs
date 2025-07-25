@@ -1,4 +1,4 @@
-namespace XTAPlaywright.XConfHandler;
+namespace XTAPlaywright.XConfFactories.XConfModels;
 
 public class XAppConfModel
 {
