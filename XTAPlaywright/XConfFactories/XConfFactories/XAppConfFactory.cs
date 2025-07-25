@@ -4,7 +4,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace XTAPlaywright.XConfFactories.XConfFactories;
 
-public class XAppConfFactory
+public static class XAppConfFactory
 {
     private const String m_X_CONFS_PATH = "XTAClientConfigs/xta_app_confs.yaml";
 

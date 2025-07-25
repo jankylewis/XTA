@@ -7,16 +7,11 @@ using XTAPlaywright.XTestCircle;
 
 namespace XTAPlaywright.XPlwCircle;
 
-public class XPlwEngineer
+public class XPlwEngineer(XPlwConfModel in_xPlwConfModel)
 {
-    public XPlwEngineer(XPlwConfModel in_xPlwConfModel)
-        => m_XPlwConfModel = in_xPlwConfModel;
-    
-    private readonly XPlwConfModel m_XPlwConfModel;
-
     public async Task<XPlwSingleCoreCableModel> GenXPlwSingleCoreCableModelAsync()
     {
-        XPlwSingleCoreCableFactory xPlwSingleCoreCableFactory = new(m_XPlwConfModel);
+        XPlwSingleCoreCableFactory xPlwSingleCoreCableFactory = new(in_xPlwConfModel);
 
         await xPlwSingleCoreCableFactory.GenPlaywrightAsync();
         await xPlwSingleCoreCableFactory.GenBrowserAsync();
@@ -26,7 +21,7 @@ public class XPlwEngineer
 
     public async Task<XPlwMultiCoreCableModel> GenXPlwMultiCoreCableModelAsync(IBrowser in_xBrowser)
     {
-        XPlwMultiCoreCableFactory xPlwMultiCoreCableFactory = new(m_XPlwConfModel);
+        XPlwMultiCoreCableFactory xPlwMultiCoreCableFactory = new(in_xPlwConfModel);
 
         await xPlwMultiCoreCableFactory.GenBrowserContextAsync(in_xBrowser);
         await xPlwMultiCoreCableFactory.GenPageAsync();
@@ -45,4 +40,10 @@ public class XPlwEngineer
         
         return in_xPlwAdapterModel;
     }
+
+    public async Task PowerDownPlwPowerSourceAsync(
+        XPlwSingleCoreCableModel in_xPlwSingleCoreCableModel, 
+        XPlwAdapterModel in_xPlwAdapterModel
+        ) 
+            => await new XPlwPowerSource(in_xPlwSingleCoreCableModel, in_xPlwAdapterModel).DisposeAsync();
 }

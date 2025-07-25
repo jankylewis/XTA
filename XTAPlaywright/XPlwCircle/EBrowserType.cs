@@ -1,4 +1,4 @@
-namespace XTAPlaywright.XPlaywrightCircle;
+namespace XTAPlaywright.XPlwCircle;
 
 internal enum EBrowserType
 {

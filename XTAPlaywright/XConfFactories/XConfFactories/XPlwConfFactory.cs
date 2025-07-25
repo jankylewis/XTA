@@ -4,7 +4,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace XTAPlaywright.XConfFactories.XConfFactories;
 
-public class XPlwConfFactory
+public static class XPlwConfFactory
 {
     private const String m_PLAYWRIGHT_CONF_PATH = "XTAClientConfigs/plw_confs.yaml";
 

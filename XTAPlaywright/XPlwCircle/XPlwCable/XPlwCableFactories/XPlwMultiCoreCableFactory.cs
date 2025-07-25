@@ -9,12 +9,11 @@ internal class XPlwMultiCoreCableFactory
 {
     internal XPlwMultiCoreCableFactory(XPlwConfModel in_xPlwConfModel)
     {
-        m_X_PLW_CONF_MODEL = in_xPlwConfModel;
+        mr_xPlwConfModel = in_xPlwConfModel;
         m_xPlwMultiCoreCableModel = new();
     }
     
-    private readonly XPlwConfModel m_X_PLW_CONF_MODEL;
-
+    private readonly XPlwConfModel mr_xPlwConfModel;
     private XPlwMultiCoreCableModel m_xPlwMultiCoreCableModel;
 
     public async Task GenBrowserContextAsync(IBrowser in_xBrowser)
@@ -23,8 +22,8 @@ internal class XPlwMultiCoreCableFactory
             {
                 ViewportSize = new ViewportSize
                 {
-                    Width = m_X_PLW_CONF_MODEL.ViewportSize.Width,
-                    Height = m_X_PLW_CONF_MODEL.ViewportSize.Height
+                    Width = mr_xPlwConfModel.ViewportSize.Width,
+                    Height = mr_xPlwConfModel.ViewportSize.Height
                 }
             });
 

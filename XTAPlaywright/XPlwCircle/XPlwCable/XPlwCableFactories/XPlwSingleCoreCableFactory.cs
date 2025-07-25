@@ -1,6 +1,5 @@
 using Microsoft.Playwright;
 using XTAPlaywright.XConfFactories.XConfModels;
-using XTAPlaywright.XPlaywrightCircle;
 using XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableModels;
 
 namespace XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableFactories;
@@ -9,12 +8,11 @@ internal class XPlwSingleCoreCableFactory
 {
     internal XPlwSingleCoreCableFactory(XPlwConfModel in_xPlwConfModel)
     {
-        m_X_PLW_CONF_MODEL = in_xPlwConfModel;
+        mr_xPlwConfModel = in_xPlwConfModel;
         m_xPlwSingleCoreCableModel = new();
     }
 
-    private readonly XPlwConfModel m_X_PLW_CONF_MODEL;
-
+    private readonly XPlwConfModel mr_xPlwConfModel;
     private XPlwSingleCoreCableModel m_xPlwSingleCoreCableModel;
 
     public async Task GenPlaywrightAsync()
@@ -24,17 +22,17 @@ internal class XPlwSingleCoreCableFactory
     {
         BrowserTypeLaunchOptions browserTypeLaunchOptions = new()
         {
-            Headless = !m_X_PLW_CONF_MODEL.Headed,
-            SlowMo = m_X_PLW_CONF_MODEL.SlowMo,
-            Timeout = m_X_PLW_CONF_MODEL.Timeout
+            Headless = !mr_xPlwConfModel.Headed,
+            SlowMo = mr_xPlwConfModel.SlowMo,
+            Timeout = mr_xPlwConfModel.Timeout
         };
 
-        IBrowser xBrowser = m_X_PLW_CONF_MODEL.BrowserType.ToUpper() switch
+        IBrowser xBrowser = mr_xPlwConfModel.BrowserType.ToUpper() switch
         {
             nameof(EBrowserType.CHROME)
                 => await m_xPlwSingleCoreCableModel.XPlaywright.Chromium.LaunchAsync(browserTypeLaunchOptions),
 
-            _ => throw new Exception($"We currently do not support the browser type: {m_X_PLW_CONF_MODEL.BrowserType}")
+            _ => throw new Exception($"We currently do not support the browser type: {mr_xPlwConfModel.BrowserType}")
         };
         
         m_xPlwSingleCoreCableModel.XBrowser = xBrowser;
