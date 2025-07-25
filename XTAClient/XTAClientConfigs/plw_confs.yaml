@@ -1,0 +1,22 @@
+
+BrowserType: "chrome"
+Headed: true #false
+SlowMo: 0
+Timeout: 30000
+
+ViewportSize:
+  Width: 1280
+  Height: 720
+
+#IgnoreHTTPSErrors: false
+#RecordVideo: false
+#Tracing: true
+#
+#VideoPath: ~
+#TracePath: ~
+#ScreenshotPath: ~
+#
+#RetryFailedUIActions: false
+#MaxRetryAttempts: 3
+#RetryDelayMilliseconds: 500
+
