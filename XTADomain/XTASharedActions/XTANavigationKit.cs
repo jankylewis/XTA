@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using XTAPlaywright.XConstHouse;
 
 namespace XTADomain.XTASharedActions;
 
@@ -8,5 +9,9 @@ public class XTANavigationKit
 
     public async Task NavigateToURLAsync(
         IPage in_xPage, string in_xURL, PageGotoOptions? in_xPageGoToOptions = default)
-            => await in_xPage.GotoAsync(in_xURL, in_xPageGoToOptions);
+            => await in_xPage.GotoAsync(in_xURL, in_xPageGoToOptions ?? new PageGotoOptions
+            { 
+                WaitUntil = WaitUntilState.Load,
+                Timeout = XConsts.NAVIGATION_TIMEOUT_MS
+            });
 }

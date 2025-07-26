@@ -1,4 +1,5 @@
 using XTACore.XTAUtils;
+using XTAPlaywright.XExceptions;
 using XTAPlaywright.XPlwCircle;
 
 namespace XTAPlaywright.XTestCircle;
@@ -14,8 +15,10 @@ public class XTestAdapter : IXTestAdapter
         {
             nameof(EBrowserType.CHROME) => "chr",
             nameof(EBrowserType.FIREFOX) => "ff",
+            nameof(EBrowserType.WEBKIT) => "wk",
     
-            _ => throw new Exception($"$Unsupport the browser type {in_browserType}")
+            _ => throw new XBrowserExecutionNotSupported(
+                $"We now are not supporting test execution on the browser type: {in_browserType}, saying sorry and please use a different one!      ")
         };
     
         XTestMetaKey = in_testMetaKey;

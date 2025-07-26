@@ -19,7 +19,7 @@ internal abstract partial class AXTATestFoundation
     private static readonly AsyncLocal<XPlwMultiCoreCableModel> msr_xPlwMultiCoreCableModel = new();
     
     protected static XAppConfModel ps_xAppConfModel;
-    private static XPlwConfModel ms_xPlaywrightConfModel;
+    protected static XPlwConfModel ps_xPlaywrightConfModel;
     
     private string m_testMethodKey => TestContext.CurrentContext.Test.MethodName;
     protected IPage p_xPage => _TakeCurrentXPage();
@@ -37,10 +37,10 @@ internal abstract partial class AXTATestFoundation
     [OneTimeSetUp]
     public static async Task XAlphaSetUp()
     {
-        ms_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlaywrightConfModel();
+        ps_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlaywrightConfModel();
         ps_xAppConfModel = XAppConfFactory.s_LoadXAppConfModel();
         
-        ms_xPlwEngineer = new(ms_xPlaywrightConfModel);
+        ms_xPlwEngineer = new(ps_xPlaywrightConfModel);
         
         ms_xPlwSingleCoreCableModel = await ms_xPlwEngineer.GenXPlwSingleCoreCableModelAsync();
      
@@ -57,7 +57,7 @@ internal abstract partial class AXTATestFoundation
         msr_xTestAdapter.Value = new XTestAdapter()
             .ProduceXTestAdapter(
                 m_testMethodKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "), 
-                ms_xPlaywrightConfModel.BrowserType
+                ps_xPlaywrightConfModel.BrowserType
                 );
 
         msr_xPlwMultiCoreCableModel.Value 

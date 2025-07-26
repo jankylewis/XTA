@@ -27,3 +27,10 @@ public class XTestMethodKeyGotEmptyException : XException
     public XTestMethodKeyGotEmptyException(string in_message) : base(in_message) {}
     public XTestMethodKeyGotEmptyException(string in_message, Exception in_innerException) : base(in_message) {}
 }
+
+public class XBrowserExecutionNotSupported : XException
+{
+    public XBrowserExecutionNotSupported() {}
+    public XBrowserExecutionNotSupported(string in_message) : base(in_message) {}
+    public XBrowserExecutionNotSupported(string in_message, Exception in_innerException) : base(in_message) {}   
+}
