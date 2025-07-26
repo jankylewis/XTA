@@ -1,13 +1,11 @@
 
 #region Import statements
 
-using Microsoft.Playwright;
 using XTAClient.XTATests.XTATestFoundation;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XModals;
 using XTADomain.XTAModels;
-using XTAPlaywright.XConstHouse;
 
 #endregion Import statements
 
@@ -62,15 +60,12 @@ internal class XLogInTests : AXTATestFoundation
     #region Introduce NUnit SetUp phase
     
     [OneTimeSetUp]
-    public async Task XMetaSetUp() => ps_xtaNavigationKit ??= new();
+    public async Task XMetaSetUp() 
+        => ps_xtaNavigationKit ??= new();
 
     [SetUp]
     public async Task XMegaSetUp()
-        => await ps_xtaNavigationKit.NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL, new PageGotoOptions
-            { 
-                WaitUntil = WaitUntilState.Load,
-                Timeout = XConsts.NAVIGATION_TIMEOUT_MS
-            });
+        => await ps_xtaNavigationKit.NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
     
     #endregion Introduce NUnit SetUp phase
 }

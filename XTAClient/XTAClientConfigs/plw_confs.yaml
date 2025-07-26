@@ -1,8 +1,8 @@
 
 BrowserType: "chrome"
-Headed: true #false
+Headed: false
 SlowMo: 0
-Timeout: 30000
+Timeout: 47000
 
 ViewportSize:
   Width: 1280

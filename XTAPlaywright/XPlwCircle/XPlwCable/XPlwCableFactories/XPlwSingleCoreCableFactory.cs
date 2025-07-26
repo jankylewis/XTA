@@ -1,5 +1,6 @@
 using Microsoft.Playwright;
 using XTAPlaywright.XConfFactories.XConfModels;
+using XTAPlaywright.XExceptions;
 using XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableModels;
 
 namespace XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableFactories;
@@ -32,7 +33,14 @@ internal class XPlwSingleCoreCableFactory
             nameof(EBrowserType.CHROME)
                 => await m_xPlwSingleCoreCableModel.XPlaywright.Chromium.LaunchAsync(browserTypeLaunchOptions),
 
-            _ => throw new Exception($"We currently do not support the browser type: {mr_xPlwConfModel.BrowserType}")
+            nameof(EBrowserType.FIREFOX)
+                => await m_xPlwSingleCoreCableModel.XPlaywright.Firefox.LaunchAsync(browserTypeLaunchOptions),
+            
+            nameof(EBrowserType.WEBKIT)
+                => await m_xPlwSingleCoreCableModel.XPlaywright.Webkit.LaunchAsync(browserTypeLaunchOptions),
+            
+            _ => throw new XBrowserExecutionNotSupported(
+                $"We currently do not support the browser type: {mr_xPlwConfModel.BrowserType}")
         };
         
         m_xPlwSingleCoreCableModel.XBrowser = xBrowser;
