@@ -50,7 +50,7 @@ public class XLogInPage
 
     private async Task _WaitForXOAuthBtnToBeReadyAsync(string in_xOAuthBtnSelector)
     {
-        await mr_xtaWebUIJSWaitStrategies.WaitForJavaScriptFunctionAsync(m_xPage, mr_appleSDKExistenceCheckJSFunc);
+        await mr_xtaWebUIJSWaitStrategies.WaitForJSFuncAsync(m_xPage, mr_appleSDKExistenceCheckJSFunc);
         await mr_xtaWebUIWaitStrategies.WaitForElementToBeClickableAsync(m_xPage, in_xOAuthBtnSelector);
     }
 
