@@ -1,4 +1,6 @@
 
+using XTAPlaywright.XExceptions;
+
 namespace XTADomain.XTAPageObjects.XPOUtils;
 
 public class XPOSharedUtils
@@ -13,6 +15,6 @@ public class XPOSharedUtils
             ELocatingMechanism.TEXT => $"text={in_selector}",
             ELocatingMechanism.ID => $"#{in_selector}",
             
-            _ => throw new Exception("Unknown locating mechanism        ")
+            _ => throw new XLocatingMechanismNotSupported($"Unknown locating mechanism: {in_locatingMechanism.ToString()}        ")
         };
 }

@@ -21,7 +21,7 @@ internal abstract partial class AXTATestFoundation
     protected static XAppConfModel ps_xAppConfModel;
     protected static XPlwConfModel ps_xPlaywrightConfModel;
     
-    private string m_testMethodKey => TestContext.CurrentContext.Test.MethodName;
+    protected string p_testMethodKey => TestContext.CurrentContext.Test.MethodName;
     protected IPage p_xPage => _TakeCurrentXPage();
     protected IBrowserContext p_xBrContext => _TakeCurrentXBrowserContext();
     
@@ -56,7 +56,7 @@ internal abstract partial class AXTATestFoundation
     {
         msr_xTestAdapter.Value = new XTestAdapter()
             .ProduceXTestAdapter(
-                m_testMethodKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "), 
+                p_testMethodKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "), 
                 ps_xPlaywrightConfModel.BrowserType
                 );
 
@@ -85,16 +85,16 @@ internal abstract partial class AXTATestFoundation
     #region Introduce private services
 
     private IPage _TakeCurrentXPage() 
-        => ms_xPlwAdapterModel.XPages.TryGetValue(m_testMethodKey, out IPage a_xPage) 
+        => ms_xPlwAdapterModel.XPages.TryGetValue(p_testMethodKey, out IPage a_xPage) 
             ? a_xPage 
             : throw new XPageNotInitializedException(
-                $"Page not initialized for test method '{m_testMethodKey}'");
+                $"Page not initialized for test method '{p_testMethodKey}'");
     
     private IBrowserContext _TakeCurrentXBrowserContext()
-        => ms_xPlwAdapterModel.XBrowserContexts.TryGetValue(m_testMethodKey, out IBrowserContext a_xBrContext)
+        => ms_xPlwAdapterModel.XBrowserContexts.TryGetValue(p_testMethodKey, out IBrowserContext a_xBrContext)
             ? a_xBrContext
             : throw new XBrowserContextNotInitializedException(
-                $"Browser Context not initialized for test method '{m_testMethodKey}'");
+                $"Browser Context not initialized for test method '{p_testMethodKey}'");
     
     #endregion Introduce private services
 }

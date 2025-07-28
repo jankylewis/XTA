@@ -12,6 +12,6 @@ public class XTANavigationKit
             => await in_xPage.GotoAsync(in_xURL, in_xPageGoToOptions ?? new PageGotoOptions
             { 
                 WaitUntil = WaitUntilState.Load,
-                Timeout = XConsts.NAVIGATION_TIMEOUT_MS
+                Timeout = XTimedoutConsts.NAVIGATION_TIMEOUT_MS
             });
 }
