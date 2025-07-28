@@ -1,11 +1,16 @@
 
 #region Import statements
 
+using Microsoft.Playwright;
 using XTAClient.XTATests.XTATestFoundation;
+using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XModals;
 using XTADomain.XTAModels;
+using XTADomain.XTASharedActions;
+using XTAPlaywright.XExceptions;
+using XTAPlaywright.XTestCircle;
 
 #endregion Import statements
 
@@ -17,10 +22,18 @@ namespace XTAClient.XTATests.XOnboardingExperience;
 [TestFixture]
 internal class XLogInTests : AXTATestFoundation
 {
+    #region Introduce class vars
+
+    private XRetryUtils m_xRetryUtils;
+
+    #endregion Introduce class vars
+    
     #region Introduce X Log In tests
     
     [Test]
-    public async Task NavigateToXLogInPage_InputCorrectCredentials_BeingLandedOnHomePage()
+    [Order(XTestEchelon.ALPHA)]
+    [Category(XTestSet.XUI_STANDARD_MODE)]
+    public async Task NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePage()
     {
         XAccountModel xAccountModel = new()
         {
@@ -48,24 +61,87 @@ internal class XLogInTests : AXTATestFoundation
     }
     
     [Test]
+    [Order(XTestEchelon.ALPHA)]
+    [Category(XTestSet.XUI_STANDARD_MODE)]
     public async Task NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayed()
     {
         await new XLogInPage(p_xPage).ClickOnSignInBtnAsync();
-
         await new XSignInToXModal(p_xPage).VerifyIfSignInToXModalDisplayedAsync();
+    }
+    
+    [Test]
+    [Order(XTestEchelon.HYPER)]
+    [Category(XTestSet.XUI_LOCAL_MODE)]
+    [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
+    public async Task NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
+    {
+        XLogInPage xLogInPage = new(p_xPage);
+
+        IPage? xAppleOAuthPopup = default;
+
+        await m_xRetryUtils.RetryAsync(async () =>
+            {
+                Task<IPage> xOAuthPopupListener = xLogInPage.GenXOAuthPopupListener();
+
+                await xLogInPage.ClickOnSignInWithAppleBtnAsync();
+
+                xAppleOAuthPopup = await xOAuthPopupListener;
+            },
+            a_ex => a_ex is TimeoutException 
+                    || a_ex is PlaywrightException,
+            3,
+            200
+        );
+        
+        await new XAppleOAuthModal(xAppleOAuthPopup!)
+            .VerifyXAppleOAuthModalPresentedAsync();
+    }
+    
+    [Test]
+    [Order(XTestEchelon.HYPER)]
+    [Category(XTestSet.XUI_LOCAL_MODE)]
+    [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
+    public async Task NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
+    {
+        XLogInPage xLogInPage = new(p_xPage);
+
+        IPage? xGoogleOAuthPopup = default;
+        
+        Task<IPage> xGoogleOAuthPopupListener = xLogInPage.GenXOAuthPopupListener();
+        
+        await xLogInPage.ClickOnSignInWithGoogleBtnAsync();
+
+        xGoogleOAuthPopup = await xGoogleOAuthPopupListener;
+
+        await new XGoogleOAuthModal(xGoogleOAuthPopup!)
+            .VerifyXOAuthGoogleModalPresentedAsync();
     }
     
     #endregion Introduce X Log In tests
 
-    #region Introduce NUnit SetUp phase
+    #region Private services
+
+    private void _AsObservedToNotBeSupported()
+    {
+        if (!ps_xPlaywrightConfModel.Headed)
+            throw new XTestNotSupportedUponHeadlessModeException(
+                $"Test {p_testMethodKey} cannot be executed upon headless mode.       ");
+    }
+
+    #endregion Private services
     
+    #region Introduce NUnit SetUp phase
+
     [OneTimeSetUp]
-    public async Task XMetaSetUp() 
-        => ps_xtaNavigationKit ??= new();
+    public void XMetaSetUp()
+    {
+        ps_xtaNavigationKit ??= new XTANavigationKit();
+        m_xRetryUtils = new XRetryUtils();
+    }
 
     [SetUp]
     public async Task XMegaSetUp()
-        => await ps_xtaNavigationKit.NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
+        => await ps_xtaNavigationKit!.NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
     
     #endregion Introduce NUnit SetUp phase
 }

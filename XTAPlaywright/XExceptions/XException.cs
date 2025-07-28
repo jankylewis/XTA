@@ -32,5 +32,26 @@ public class XBrowserExecutionNotSupported : XException
 {
     public XBrowserExecutionNotSupported() {}
     public XBrowserExecutionNotSupported(string in_message) : base(in_message) {}
-    public XBrowserExecutionNotSupported(string in_message, Exception in_innerException) : base(in_message) {}   
+    public XBrowserExecutionNotSupported(string in_message, Exception in_innerException) : base(in_message) {}
+}
+
+public class XLocatingMechanismNotSupported : XException
+{
+    public XLocatingMechanismNotSupported() {}
+    public XLocatingMechanismNotSupported(string in_message) : base(in_message) {}
+    public XLocatingMechanismNotSupported(string in_message, Exception in_innerException) : base(in_message) {}
+}
+
+public class XPreqrequisitesNotQualifiedException : XException
+{
+    public XPreqrequisitesNotQualifiedException() {}
+    public XPreqrequisitesNotQualifiedException(string in_message) : base(in_message) {}
+    public XPreqrequisitesNotQualifiedException(string in_message, Exception in_innerException) : base(in_message) {}
+}
+
+public class XTestNotSupportedUponHeadlessModeException : XException
+{
+    public XTestNotSupportedUponHeadlessModeException() {}
+    public XTestNotSupportedUponHeadlessModeException(string in_message) : base(in_message) {}
+    public XTestNotSupportedUponHeadlessModeException(string in_message, Exception in_innerException) : base(in_message) {}   
 }

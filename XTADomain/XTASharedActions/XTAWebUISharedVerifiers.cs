@@ -7,12 +7,28 @@ public class XTAWebUISharedVerifiers
 {
     internal XTAWebUISharedVerifiers() {}
     
-    internal async Task VerifyIfTextContentMatchedAsync(IPage in_page, string in_selector, string in_expectedText) 
-        => (await in_page.TextContentAsync(in_selector)).Should().Be(in_expectedText);
+    internal async Task VerifyIfTextContentMatchedAsync(IPage in_xPage, string in_selector, string in_expectedText) 
+        => (await in_xPage.TextContentAsync(in_selector)).Should().Be(in_expectedText);
 
-    internal async Task VerifyIfElementIsVisibleWithoutWaitsAsync(IPage in_page, string in_selector) 
-        => (await in_page.IsVisibleAsync(in_selector)).Should().Be(true);
+    internal async Task VerifyIfElementIsVisibleWithoutWaitsAsync(IPage in_xPage, string in_selector) 
+        => (await in_xPage.IsVisibleAsync(in_selector)).Should().Be(true);
 
-    internal async Task VerifyIfElementIsVisibleWithWaitsAsync(IPage in_page, string in_selector) 
-        => await Expect(in_page.Locator(in_selector)).ToBeVisibleAsync();
+    internal async Task VerifyIfElementIsVisibleWithWaitsAsync(
+        IPage in_xPage, string in_selector, LocatorAssertionsToBeVisibleOptions? in_locatorAssertionsToBeVisibleOpts = default) 
+            => await Expect(in_xPage.Locator(in_selector))
+                .ToBeVisibleAsync(in_locatorAssertionsToBeVisibleOpts);
+
+    internal async Task VerifyIfElementIsClickableAsync(
+        IPage in_xPage,
+        string in_selector,
+        LocatorClickOptions? in_clickOptions = default)
+    {
+        LocatorClickOptions locatorClickOpts = in_clickOptions ?? new LocatorClickOptions
+        {
+            Trial = true,
+            Timeout = XTAPlaywright.XConstHouse.XTimedoutConsts.MAX_ELEMENT_TIMEOUT_MS
+        };
+
+        await in_xPage.Locator(in_selector).ClickAsync(locatorClickOpts);
+    }
 }
