@@ -7,7 +7,7 @@ public class XTAWebUIJSWaitStrategies
 {
     internal XTAWebUIJSWaitStrategies() {}
     
-    internal async Task WaitForJavaScriptFunctionAsync(
+    internal async Task WaitForJSFuncAsync(
         IPage in_xPage, 
         string in_jsFunc, 
         PageWaitForFunctionOptions? in_pageWaitForFunctionOptions = default
