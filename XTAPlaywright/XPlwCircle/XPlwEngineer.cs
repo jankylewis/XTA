@@ -40,10 +40,25 @@ public class XPlwEngineer(XPlwConfModel in_xPlwConfModel)
         
         return in_xPlwAdapterModel;
     }
-
+    
     public async Task PowerDownPlwPowerSourceAsync(
         XPlwSingleCoreCableModel in_xPlwSingleCoreCableModel, 
         XPlwAdapterModel in_xPlwAdapterModel
         ) 
             => await new XPlwPowerSource(in_xPlwSingleCoreCableModel, in_xPlwAdapterModel).DisposeAsync();
+
+    public async Task<XPlwAdapterModel> UnplugMultiCoreCableFromXAdapter(
+        XPlwMultiCoreCableModel in_xPlwMultiCoreCableModel, XPlwAdapterModel in_xPlwAdapterModel, IXTestAdapter in_xTestAdapter)
+    {
+        await in_xPlwMultiCoreCableModel.XPage.CloseAsync();
+        await in_xPlwMultiCoreCableModel.XBrowserContext.CloseAsync();
+
+        in_xPlwAdapterModel.XPages.TryRemove(in_xTestAdapter.XTestMetaKey, out _);
+        in_xPlwAdapterModel.XPages.TryRemove(in_xTestAdapter.XTestCorrelationID, out _);
+
+        in_xPlwAdapterModel.XBrowserContexts.TryRemove(in_xTestAdapter.XTestMetaKey, out _);
+        in_xPlwAdapterModel.XBrowserContexts.TryRemove(in_xTestAdapter.XTestCorrelationID, out _);
+        
+        return in_xPlwAdapterModel;
+    }
 }

@@ -22,12 +22,6 @@ namespace XTAClient.XTATests.XOnboardingExperience;
 [TestFixture]
 internal class XLogInTests : AXTATestFoundation
 {
-    #region Introduce class vars
-
-    private XRetryUtils m_xRetryUtils;
-
-    #endregion Introduce class vars
-    
     #region Introduce X Log In tests
     
     [Test]
@@ -79,7 +73,8 @@ internal class XLogInTests : AXTATestFoundation
 
         IPage? xAppleOAuthPopup = default;
 
-        await m_xRetryUtils.RetryAsync(async () =>
+        await XSingletonFactory.s_DaVinciResolve<XRetryUtils>()
+            .RetryAsync(async () =>
             {
                 Task<IPage> xOAuthPopupListener = xLogInPage.GenXOAuthPopupListener();
 
@@ -125,7 +120,7 @@ internal class XLogInTests : AXTATestFoundation
     {
         if (!ps_xPlaywrightConfModel.Headed)
             throw new XTestNotSupportedUponHeadlessModeException(
-                $"Test {p_testMethodKey} cannot be executed upon headless mode.       ");
+                $"Test {p_xTestMetaKey} cannot be executed upon headless mode.       ");
     }
 
     #endregion Private services
@@ -133,15 +128,13 @@ internal class XLogInTests : AXTATestFoundation
     #region Introduce NUnit SetUp phase
 
     [OneTimeSetUp]
-    public void XMetaSetUp()
-    {
-        ps_xtaNavigationKit ??= new XTANavigationKit();
-        m_xRetryUtils = new XRetryUtils();
-    }
+    public static void s_XMetaSetUp() 
+        => XSingletonFactory.s_Register<XTANavigationKit>();
 
     [SetUp]
     public async Task XMegaSetUp()
-        => await ps_xtaNavigationKit!.NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
+        => await XSingletonFactory.s_Retrieve<XTANavigationKit>()
+            .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
     
     #endregion Introduce NUnit SetUp phase
 }
