@@ -6,6 +6,8 @@ using XTAPlaywright.XPlwCircle;
 using XTAPlaywright.XPlwCircle.XPlwAdapter;
 using XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableModels;
 using XTAPlaywright.XTestCircle;
+using System.Collections.Concurrent;
+using XTACore.XTAUtils;
 
 namespace XTAClient.XTATests.XTATestFoundation;
 
@@ -13,20 +15,22 @@ internal abstract partial class AXTATestFoundation
 {
     #region Introduce foundational vars
     
-    private static XPlwEngineer ms_xPlwEngineer;
-    
+    protected string p_xTestMetaKey => TestContext.CurrentContext.Test.MethodName!;
+
     private static XPlwSingleCoreCableModel ms_xPlwSingleCoreCableModel;
-    private static readonly AsyncLocal<XPlwMultiCoreCableModel> msr_xPlwMultiCoreCableModel = new();
+    
+    private static readonly ConcurrentDictionary<string, XPlwMultiCoreCableModel> msr_xPlwMultiCoreCableModels = new();
+    private static readonly ConcurrentDictionary<string, IXTestAdapter> msr_xTestAdapters = new();
+    
+    private static XPlwAdapterModel ms_xPlwAdapterModel;
+    
+    private static XPlwEngineer ms_xPlwEngineer;
     
     protected static XAppConfModel ps_xAppConfModel;
     protected static XPlwConfModel ps_xPlaywrightConfModel;
     
-    protected string p_testMethodKey => TestContext.CurrentContext.Test.MethodName;
     protected IPage p_xPage => _TakeCurrentXPage();
     protected IBrowserContext p_xBrContext => _TakeCurrentXBrowserContext();
-    
-    private static readonly AsyncLocal<IXTestAdapter> msr_xTestAdapter = new();
-    private static XPlwAdapterModel ms_xPlwAdapterModel;
     
     #endregion Introduce foundational vars
 
@@ -34,8 +38,7 @@ internal abstract partial class AXTATestFoundation
 
     #region Introduce NUnit SetUp phase
     
-    [OneTimeSetUp]
-    public static async Task XAlphaSetUp()
+    public static async Task s_XAlphaSetUp() 
     {
         ps_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlaywrightConfModel();
         ps_xAppConfModel = XAppConfFactory.s_LoadXAppConfModel();
@@ -54,29 +57,43 @@ internal abstract partial class AXTATestFoundation
     [SetUp]
     public async Task XHyperSetUp()
     {
-        msr_xTestAdapter.Value = new XTestAdapter()
+        IXTestAdapter xTestAdapter = new XTestAdapter()
             .ProduceXTestAdapter(
-                p_testMethodKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "), 
+                p_xTestMetaKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "),
                 ps_xPlaywrightConfModel.BrowserType
-                );
+            );
 
-        msr_xPlwMultiCoreCableModel.Value 
+        XPlwMultiCoreCableModel xPlwMultiCoreCableModel 
             = await ms_xPlwEngineer.GenXPlwMultiCoreCableModelAsync(ms_xPlwSingleCoreCableModel.XBrowser);
+        
+        msr_xTestAdapters[p_xTestMetaKey] = xTestAdapter;
+
+        msr_xPlwMultiCoreCableModels[p_xTestMetaKey] = xPlwMultiCoreCableModel;
 
         ms_xPlwAdapterModel 
-            = ms_xPlwEngineer.PlugXMultiCoreCableIntoXAdapter(msr_xTestAdapter.Value, msr_xPlwMultiCoreCableModel.Value, ms_xPlwAdapterModel);
+            = ms_xPlwEngineer.PlugXMultiCoreCableIntoXAdapter(xTestAdapter, xPlwMultiCoreCableModel, ms_xPlwAdapterModel);
     }
 
     #endregion Introduce NUnit SetUp phase
     
     #region Introduce NUnit TearDown phase
-    
-    [TearDown]
-    public async Task XHyperTearDown() {}
 
-    [OneTimeTearDown]
-    public static async Task XAlphaTearDown()
-        => await ms_xPlwEngineer.PowerDownPlwPowerSourceAsync(ms_xPlwSingleCoreCableModel, ms_xPlwAdapterModel);
+    [TearDown]
+    public async Task XHyperTearDown()
+    {
+        if (msr_xPlwMultiCoreCableModels.TryRemove(p_xTestMetaKey, out var a_xPlwMultiCableModel)
+            && msr_xTestAdapters.TryRemove(p_xTestMetaKey, out var a_xTestAdapter))
+        {
+            ms_xPlwAdapterModel = await ms_xPlwEngineer
+                .UnplugMultiCoreCableFromXAdapter(a_xPlwMultiCableModel, ms_xPlwAdapterModel, a_xTestAdapter);
+        }
+    }
+
+    public static async Task s_XAlphaTearDown()
+    {
+        await ms_xPlwEngineer.PowerDownPlwPowerSourceAsync(ms_xPlwSingleCoreCableModel, ms_xPlwAdapterModel);
+        XSingletonFactory.s_DisposeAll();
+    }
 
     #endregion Introduce NUnit TearDown phase
     
@@ -85,16 +102,16 @@ internal abstract partial class AXTATestFoundation
     #region Introduce private services
 
     private IPage _TakeCurrentXPage() 
-        => ms_xPlwAdapterModel.XPages.TryGetValue(p_testMethodKey, out IPage a_xPage) 
+        => ms_xPlwAdapterModel.XPages.TryGetValue(p_xTestMetaKey, out IPage a_xPage) 
             ? a_xPage 
             : throw new XPageNotInitializedException(
-                $"Page not initialized for test method '{p_testMethodKey}'");
+                $"Page not initialized for test method '{p_xTestMetaKey}'");
     
     private IBrowserContext _TakeCurrentXBrowserContext()
-        => ms_xPlwAdapterModel.XBrowserContexts.TryGetValue(p_testMethodKey, out IBrowserContext a_xBrContext)
+        => ms_xPlwAdapterModel.XBrowserContexts.TryGetValue(p_xTestMetaKey, out IBrowserContext a_xBrContext)
             ? a_xBrContext
             : throw new XBrowserContextNotInitializedException(
-                $"Browser Context not initialized for test method '{p_testMethodKey}'");
+                $"Browser Context not initialized for test method '{p_xTestMetaKey}'");
     
     #endregion Introduce private services
 }
