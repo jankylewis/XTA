@@ -1,8 +1,9 @@
 using Microsoft.Playwright;
+using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
-using XTADomain.XTAPageObjects.XCoreExperience;
+using XTADomain.XTAPageObjects.XCoreExperience.XHomExperience;
 
-namespace XTADomain.XTABusinesses.XCoreExperience;
+namespace XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 
 public class XHomePage : AXPage
 {
@@ -14,7 +15,7 @@ public class XHomePage : AXPage
 
     #region Introduce class vars
 
-    private readonly XHomePOs mr_xHomePOs = new();
+    private readonly XHomePOs mr_xHomePOs = XSingletonFactory.s_DaVinciResolve<XHomePOs>();
 
     #endregion Introduce class vars
 
@@ -22,6 +23,6 @@ public class XHomePage : AXPage
 
     public async Task ClickOnProfileNavAsync() 
         => await p_ClickOnSharedNavAsync(mr_xHomePOs.SHARED_NAV(mr_xHomePOs.r_profileNav));
-
+    
     #endregion Introduce actions
 }

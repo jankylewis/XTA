@@ -1,8 +1,8 @@
 using Microsoft.Playwright;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
-using XTADomain.XTAPageObjects.XOnboardingExperience.XModals;
+using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
 
-namespace XTADomain.XTABusinesses.XOnboardingExperience.XModals;
+namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
 public class XSignInToXModal : AXModal
 {

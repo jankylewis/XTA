@@ -1,12 +1,13 @@
+using XTACore.XTAUtils;
 using XTADomain.XTAPageObjects.XPOUtils;
 
-namespace XTADomain.XTAPageObjects.XOnboardingExperience.XModals;
+namespace XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
 
 internal class XEnterYourPasswordMOs
 {
     internal XEnterYourPasswordMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = new();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
 
     internal String TXT_PASSWORD 
         => mr_xPOSharedUtils.BuildSelector("input[name='password']", ELocatingMechanism.CSS);

@@ -4,7 +4,7 @@ namespace XTADomain.XTASharedActions;
 
 public class XTAWebUISharedActions
 {
-    internal XTAWebUISharedActions() {}
+    public XTAWebUISharedActions() {}
     
     internal async Task ClickAsync(IPage in_xPage, string in_selector) 
         => await in_xPage.ClickAsync(in_selector);

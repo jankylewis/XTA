@@ -1,4 +1,5 @@
 using Microsoft.Playwright;
+using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
 using XTADomain.XTAPageObjects.XCoreExperience;
 
@@ -14,7 +15,7 @@ public class XUserProfilePage : AXPage
 
     #region Introduce class vars
 
-    private readonly XUserProfilePOs mr_xUserProfilePOs = new();
+    private readonly XUserProfilePOs mr_xUserProfilePOs = XSingletonFactory.s_DaVinciResolve<XUserProfilePOs>();
 
     #endregion Introduce class vars
 

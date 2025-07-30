@@ -5,7 +5,7 @@ namespace XTADomain.XTASharedActions;
 
 public class XTAWebUIJSWaitStrategies
 {
-    internal XTAWebUIJSWaitStrategies() {}
+    public XTAWebUIJSWaitStrategies() {}
     
     internal async Task WaitForJSFuncAsync(
         IPage in_xPage, 

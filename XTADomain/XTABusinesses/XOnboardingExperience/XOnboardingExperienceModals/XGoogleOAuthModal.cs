@@ -1,9 +1,9 @@
 using Microsoft.Playwright;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
-using XTADomain.XTAPageObjects.XOnboardingExperience.XModals;
+using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
 using XTAPlaywright.XConstHouse;
 
-namespace XTADomain.XTABusinesses.XOnboardingExperience.XModals;
+namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
 public class XGoogleOAuthModal : AXModal
 {

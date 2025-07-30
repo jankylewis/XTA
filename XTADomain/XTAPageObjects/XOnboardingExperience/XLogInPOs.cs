@@ -1,12 +1,13 @@
+using XTACore.XTAUtils;
 using XTADomain.XTAPageObjects.XPOUtils;
 
 namespace XTADomain.XTAPageObjects.XOnboardingExperience;
 
 internal class XLogInPOs
 {
-    internal XLogInPOs() {}
+    public XLogInPOs() {}
 
-    private readonly XPOSharedUtils mr_xPOSharedUtils = new();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
 
     internal String BTN_SIGN_IN 
         => mr_xPOSharedUtils.BuildSelector("a[href='/login'] div", ELocatingMechanism.CSS);

@@ -5,8 +5,9 @@ using Microsoft.Playwright;
 using XTAClient.XTATests.XTATestFoundation;
 using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
+using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience;
-using XTADomain.XTABusinesses.XOnboardingExperience.XModals;
+using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
 using XTAPlaywright.XExceptions;
@@ -27,7 +28,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePage()
+    public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePage()
     {
         XAccountModel xAccountModel = new()
         {
@@ -57,7 +58,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayed()
+    public async Task XUITest_NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayed()
     {
         await new XLogInPage(p_xPage).ClickOnSignInBtnAsync();
         await new XSignInToXModal(p_xPage).VerifyIfSignInToXModalDisplayedAsync();
@@ -67,7 +68,7 @@ internal class XLogInTests : AXTATestFoundation
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
     [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
-    public async Task NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
+    public async Task XUITest_NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
 
@@ -96,7 +97,7 @@ internal class XLogInTests : AXTATestFoundation
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
     [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
-    public async Task NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
+    public async Task XUITest_NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
 

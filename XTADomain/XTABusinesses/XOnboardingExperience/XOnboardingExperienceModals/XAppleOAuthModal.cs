@@ -1,9 +1,10 @@
 using Microsoft.Playwright;
+using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
-using XTADomain.XTAPageObjects.XOnboardingExperience.XModals;
+using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
 using XTAPlaywright.XConstHouse;
 
-namespace XTADomain.XTABusinesses.XOnboardingExperience.XModals;
+namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
 public class XAppleOAuthModal : AXModal
 {
@@ -17,7 +18,7 @@ public class XAppleOAuthModal : AXModal
     
     private readonly IPage mr_xAppleOAuthModal = default!;
     
-    private readonly XAppleOAuthMOs mr_xAppleOAuthMOs = new();
+    private readonly XAppleOAuthMOs mr_xAppleOAuthMOs = XSingletonFactory.s_DaVinciResolve<XAppleOAuthMOs>();
     
     #endregion Introduce class vars
 

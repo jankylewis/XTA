@@ -1,12 +1,13 @@
+using XTACore.XTAUtils;
 using XTADomain.XTAPageObjects.XPOUtils;
 
-namespace XTADomain.XTAPageObjects.XOnboardingExperience.XModals;
+namespace XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
 
 internal class XAppleOAuthMOs
 {
-    internal XAppleOAuthMOs() {}
+    public XAppleOAuthMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = new();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
     
     internal String IC_X_APP_LOGO 
         => mr_xPOSharedUtils.BuildSelector("#signin img", ELocatingMechanism.CSS);
