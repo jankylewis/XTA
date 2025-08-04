@@ -3,11 +3,11 @@ using XTADomain.XTAPageObjects.XPOUtils;
 
 namespace XTADomain.XTAPageObjects.XPOAbstractions;
 
-internal abstract class AXPOs
+public abstract class AXPOs
 {
     #region Introduce vars
 
-    protected XPOSharedUtils p_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    protected XPOSharedUtils p_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
     
     #endregion Introduce vars
 
@@ -21,10 +21,10 @@ internal abstract class AXPOs
     internal String BTN_POST 
         => p_xPOSharedUtils.BuildSelector("a[data-testid='SideNav_NewTweet_Button']", ELocatingMechanism.CSS);
 
-    internal String TXTA_POST_CONTENT
+    internal String TXTA_TWEET_CONTENT
         => p_xPOSharedUtils.BuildSelector("div[aria-modal] div[data-testid='tweetTextarea_0']", ELocatingMechanism.CSS);
 
-    internal String BTN_POST_TWEET 
+    internal String BTN_TWEET
         => p_xPOSharedUtils.BuildSelector("button[data-testid='tweetButton']", ELocatingMechanism.CSS);
 
     #endregion Introduce banner elements

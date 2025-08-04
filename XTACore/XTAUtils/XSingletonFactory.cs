@@ -26,7 +26,7 @@ public static class XSingletonFactory
         throw new InvalidOperationException($"Type {typeof(XService).FullName} has not been registered in the X Singleton Pool.      ");
     }
     
-    public static XService s_DaVinciResolve<XService>() where XService : new()
+    public static XService s_DaVinci<XService>() where XService : new()
     {
         Lazy<object> lazyInitExec = msr_xSingletonServices.GetOrAdd(
             typeof(XService), _ => new Lazy<object>(() => new XService(), LazyThreadSafetyMode.ExecutionAndPublication));

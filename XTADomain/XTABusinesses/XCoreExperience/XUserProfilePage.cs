@@ -5,34 +5,36 @@ using XTADomain.XTAPageObjects.XCoreExperience;
 
 namespace XTADomain.XTABusinesses.XCoreExperience;
 
-public class XUserProfilePage : AXPage
+public class XUserProfilePage(IPage in_xPage) 
+    : AXPage<XUserProfilePOs>(in_xPage, XSingletonFactory.s_DaVinci<XUserProfilePOs>())
 {
-    #region Introduce constructors
-
-    public XUserProfilePage(IPage in_xPage) => p_xPage = in_xPage;
-
-    #endregion Introduce constructors
-
     #region Introduce class vars
 
-    private readonly XUserProfilePOs mr_xUserProfilePOs = XSingletonFactory.s_DaVinciResolve<XUserProfilePOs>();
+    private readonly XUserProfilePOs mr_xUserProfilePOs = XSingletonFactory.s_Retrieve<XUserProfilePOs>();
 
     #endregion Introduce class vars
 
-    #region Introduce actions
+    #region Introduce verifications
 
     public async Task VerifyDisplayNameShownCorrectlyAsync(String in_expectedXDisplayName)
     {
         await pr_xtaWebUIWaitStrategies
-            .WaitForElementToBeVisibleAsync(p_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
+            .WaitForElementToBeVisibleAsync(pr_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
         
         await pr_xtaWebUISharedVerifiers
-            .VerifyIfElementIsVisibleWithoutWaitsAsync(p_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
+            .VerifyIfElementIsVisibleWithoutWaitsAsync(pr_xPage, mr_xUserProfilePOs.LBL_USER_DISPLAY_NAME(in_expectedXDisplayName));
     }
 
     public async Task VerifyUsernameShownCorrectlyAsync(String in_expectedXUsername) 
         => await pr_xtaWebUISharedVerifiers
-            .VerifyIfElementIsVisibleWithoutWaitsAsync(p_xPage, mr_xUserProfilePOs.LBL_USERNAME(in_expectedXUsername));
+            .VerifyIfElementIsVisibleWithoutWaitsAsync(pr_xPage, mr_xUserProfilePOs.LBL_USERNAME(in_expectedXUsername));
+
+    public async Task VerifyAnXPostSuccessfullyCreated()
+    {
+        
+    }
     
-    #endregion Introduce actions
+    #endregion Introduce verifications
+    
+    
 }

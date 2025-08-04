@@ -7,7 +7,7 @@ internal class XLogInPOs
 {
     public XLogInPOs() {}
 
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
 
     internal String BTN_SIGN_IN 
         => mr_xPOSharedUtils.BuildSelector("a[href='/login'] div", ELocatingMechanism.CSS);

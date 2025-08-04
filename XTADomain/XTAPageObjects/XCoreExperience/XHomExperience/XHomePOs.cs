@@ -3,7 +3,7 @@ using XTADomain.XTAPageObjects.XPOUtils;
 
 namespace XTADomain.XTAPageObjects.XCoreExperience.XHomExperience;
 
-internal class XHomePOs : AXPOs
+public class XHomePOs : AXPOs
 {
     public XHomePOs() {}
 

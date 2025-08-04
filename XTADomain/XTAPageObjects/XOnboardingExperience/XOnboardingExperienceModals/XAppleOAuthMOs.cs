@@ -7,7 +7,7 @@ internal class XAppleOAuthMOs
 {
     public XAppleOAuthMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
     
     internal String IC_X_APP_LOGO 
         => mr_xPOSharedUtils.BuildSelector("#signin img", ELocatingMechanism.CSS);

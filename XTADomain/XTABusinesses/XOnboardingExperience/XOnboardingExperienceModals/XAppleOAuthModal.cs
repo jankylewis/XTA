@@ -18,7 +18,7 @@ public class XAppleOAuthModal : AXModal
     
     private readonly IPage mr_xAppleOAuthModal = default!;
     
-    private readonly XAppleOAuthMOs mr_xAppleOAuthMOs = XSingletonFactory.s_DaVinciResolve<XAppleOAuthMOs>();
+    private readonly XAppleOAuthMOs mr_xAppleOAuthMOs = XSingletonFactory.s_DaVinci<XAppleOAuthMOs>();
     
     #endregion Introduce class vars
 

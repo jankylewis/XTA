@@ -6,12 +6,12 @@ using XTAPlaywright.XExceptions;
 namespace XTAPlaywright.XTestCircle;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-public class XPrerequisitesAttribute : Attribute, ITestAction
+public class XZetaAttribute : Attribute, ITestAction
 {
-    public XPrerequisitesAttribute(params string[] in_prerequisites)
-        => mr_xTestPrerequisites = in_prerequisites ?? throw new ArgumentNullException(nameof(in_prerequisites));
+    public XZetaAttribute(params string[] in_xZetas)
+        => mr_xTestZetas = in_xZetas ?? throw new ArgumentNullException(nameof(in_xZetas));
     
-    private readonly string[] mr_xTestPrerequisites;
+    private readonly string[] mr_xTestZetas;
     
     public ActionTargets Targets => ActionTargets.Test;
 
@@ -21,13 +21,13 @@ public class XPrerequisitesAttribute : Attribute, ITestAction
         
         Type? xTestClass = xTestInstance?.GetType();
 
-        foreach (string l_xTestPrerequisite in mr_xTestPrerequisites)
-            _ExecutePrerequisiteMethod(xTestInstance, xTestClass!, l_xTestPrerequisite);;
+        foreach (string l_xZeta in mr_xTestZetas)
+            _ExecuteXZeta(xTestInstance, xTestClass!, l_xZeta);
     }
 
     public void AfterTest(ITest in_xTest) {}
 
-    private void _ExecutePrerequisiteMethod(
+    private void _ExecuteXZeta(
         object in_xTestInstance, Type in_xTestClass, string in_xTestMethodName)
     {
         try
@@ -37,20 +37,20 @@ public class XPrerequisitesAttribute : Attribute, ITestAction
             );
 
             if (methodInfo is null)
-                throw new XPreqrequisitesNotQualifiedException(
-                    $"Prerequisite method: {in_xTestMethodName} not found in class: <{in_xTestClass.Name}>. " +
+                throw new XZetaNotQualifiedException(
+                    $"Zeta method: {in_xTestMethodName} not found in class: <{in_xTestClass.Name}>. " +
                     $"Please ensure the method exists and is accessible.      "
                 );
 
-            object? xPrerequisiteResults = methodInfo.Invoke(in_xTestInstance, null);
+            object? xZetaResults = methodInfo.Invoke(in_xTestInstance, null);
 
-            if (xPrerequisiteResults is Task task)
+            if (xZetaResults is Task task)
                 task.GetAwaiter().GetResult();
         }
         catch (TargetInvocationException a_targetInvocationEx)
         {
-            throw new XPreqrequisitesNotQualifiedException(
-                $"Prerequisite method: {in_xTestMethodName} failed during execution: " +
+            throw new XZetaNotQualifiedException(
+                $"Zeta method: {in_xTestMethodName} failed during execution: " +
                 $"\n\nOriginal exception: {a_targetInvocationEx}\n\n" + 
                 $"\n\nInner exception: {a_targetInvocationEx?.InnerException?.Message}\n\n",
                 a_targetInvocationEx.InnerException
@@ -58,8 +58,8 @@ public class XPrerequisitesAttribute : Attribute, ITestAction
         }
         catch (Exception a_ex)
         {
-            throw new XPreqrequisitesNotQualifiedException(
-                $"Prerequisite method: {in_xTestMethodName} failed to execute prerequisite method <{in_xTestMethodName}> " +
+            throw new XZetaNotQualifiedException(
+                $"Zeta method: {in_xTestMethodName} failed to execute Zeta method <{in_xTestMethodName}> " +
                 $"with failed message: {a_ex?.Message}",
                 a_ex
             );

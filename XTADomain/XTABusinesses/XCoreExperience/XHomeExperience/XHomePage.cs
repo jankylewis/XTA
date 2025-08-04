@@ -5,24 +5,18 @@ using XTADomain.XTAPageObjects.XCoreExperience.XHomExperience;
 
 namespace XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 
-public class XHomePage : AXPage
+public class XHomePage(IPage in_xPage) : AXPage<XHomePOs>(in_xPage, XSingletonFactory.s_DaVinci<XHomePOs>())
 {
-    #region Introduce constructors
-
-    public XHomePage(IPage in_xPage) => p_xPage = in_xPage;
-
-    #endregion Introduce constructors
-
     #region Introduce class vars
 
-    private readonly XHomePOs mr_xHomePOs = XSingletonFactory.s_DaVinciResolve<XHomePOs>();
+    private readonly XHomePOs mr_xHomePOs = XSingletonFactory.s_Retrieve<XHomePOs>();
 
     #endregion Introduce class vars
-
+    
     #region Introduce actions
 
     public async Task ClickOnProfileNavAsync() 
-        => await p_ClickOnSharedNavAsync(mr_xHomePOs.SHARED_NAV(mr_xHomePOs.r_profileNav));
+        => await ClickOnSharedNavAsync(mr_xHomePOs.r_profileNav);
     
     #endregion Introduce actions
 }

@@ -7,7 +7,7 @@ internal class XSignInToXMOs
 {
     internal XSignInToXMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
 
     internal String TXT_USERNAME 
         => mr_xPOSharedUtils.BuildSelector("input[autocomplete='username'][autocapitalize='sentences']"

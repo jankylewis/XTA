@@ -7,7 +7,7 @@ internal class XGoogleOAuthMOs
 {
     internal XGoogleOAuthMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
 
     internal string TXT_EMAIL 
         => mr_xPOSharedUtils.BuildSelector("identifierId", ELocatingMechanism.ID);

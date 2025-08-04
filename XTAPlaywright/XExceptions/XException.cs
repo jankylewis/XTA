@@ -42,11 +42,18 @@ public class XLocatingMechanismNotSupported : XException
     public XLocatingMechanismNotSupported(string in_message, Exception in_innerException) : base(in_message) {}
 }
 
-public class XPreqrequisitesNotQualifiedException : XException
+public class XZetaNotQualifiedException : XException
 {
-    public XPreqrequisitesNotQualifiedException() {}
-    public XPreqrequisitesNotQualifiedException(string in_message) : base(in_message) {}
-    public XPreqrequisitesNotQualifiedException(string in_message, Exception in_innerException) : base(in_message) {}
+    public XZetaNotQualifiedException() {}
+    public XZetaNotQualifiedException(string in_message) : base(in_message) {}
+    public XZetaNotQualifiedException(string in_message, Exception in_innerException) : base(in_message) {}
+}
+
+public class XSigmaNotQualifiedException : XException
+{
+    public XSigmaNotQualifiedException() {}
+    public XSigmaNotQualifiedException(string in_message) : base(in_message) {}
+    public XSigmaNotQualifiedException(string in_message, Exception in_innerException) : base(in_message) {}
 }
 
 public class XTestNotSupportedUponHeadlessModeException : XException

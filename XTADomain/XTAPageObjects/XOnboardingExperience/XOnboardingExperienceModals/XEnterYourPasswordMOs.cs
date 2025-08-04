@@ -7,7 +7,7 @@ internal class XEnterYourPasswordMOs
 {
     internal XEnterYourPasswordMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
 
     internal String TXT_PASSWORD 
         => mr_xPOSharedUtils.BuildSelector("input[name='password']", ELocatingMechanism.CSS);

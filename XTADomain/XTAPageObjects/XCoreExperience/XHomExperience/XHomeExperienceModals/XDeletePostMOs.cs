@@ -7,8 +7,8 @@ internal class XDeletePostMOs
 {
     public XDeletePostMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinciResolve<XPOSharedUtils>();
+    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
 
     internal String BTN_DELETE_POST
-        => mr_xPOSharedUtils.BuildSelector("//div[span[text()='Delete']]", ELocatingMechanism.XPATH);
+        => mr_xPOSharedUtils.BuildSelector("//span[text()='Delete']", ELocatingMechanism.XPATH);
 }

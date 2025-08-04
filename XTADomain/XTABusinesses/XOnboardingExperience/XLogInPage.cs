@@ -9,11 +9,11 @@ public class XLogInPage(IPage in_xPage)
 {
     #region Introduce class vars
     
-    private readonly XLogInPOs mr_xLogInPOs = XSingletonFactory.s_DaVinciResolve<XLogInPOs>();
+    private readonly XLogInPOs mr_xLogInPOs = XSingletonFactory.s_DaVinci<XLogInPOs>();
     
-    private readonly XTAWebUISharedActions mr_xtaWebUISharedActions = XSingletonFactory.s_DaVinciResolve<XTAWebUISharedActions>();
-    private readonly XTAWebUIWaitStrategies mr_xtaWebUIWaitStrategies = XSingletonFactory.s_DaVinciResolve<XTAWebUIWaitStrategies>();
-    private readonly XTAWebUIJSWaitStrategies mr_xtaWebUIJSWaitStrategies = XSingletonFactory.s_DaVinciResolve<XTAWebUIJSWaitStrategies>();
+    private readonly XTAWebUISharedActions mr_xtaWebUISharedActions = XSingletonFactory.s_DaVinci<XTAWebUISharedActions>();
+    private readonly XTAWebUIWaitStrategies mr_xtaWebUIWaitStrategies = XSingletonFactory.s_DaVinci<XTAWebUIWaitStrategies>();
+    private readonly XTAWebUIJSWaitStrategies mr_xtaWebUIJSWaitStrategies = XSingletonFactory.s_DaVinci<XTAWebUIJSWaitStrategies>();
     
     private readonly string mr_appleSDKExistenceCheckJSFunc 
         = "() => window.AppleID !== undefined && typeof window.AppleID.auth === 'object'";

@@ -67,14 +67,14 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
-    [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
+    [XZeta(nameof(_xZeta_AsObservedToNotBeSupported))]
     public async Task XUITest_NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
 
         IPage? xAppleOAuthPopup = default;
 
-        await XSingletonFactory.s_DaVinciResolve<XRetryUtils>()
+        await XSingletonFactory.s_DaVinci<XRetryUtils>()
             .RetryAsync(async () =>
             {
                 Task<IPage> xOAuthPopupListener = xLogInPage.GenXOAuthPopupListener();
@@ -96,7 +96,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
-    [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
+    [XZeta(nameof(_xZeta_AsObservedToNotBeSupported))]
     public async Task XUITest_NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
@@ -117,7 +117,7 @@ internal class XLogInTests : AXTATestFoundation
 
     #region Private services
 
-    private void _AsObservedToNotBeSupported()
+    private void _xZeta_AsObservedToNotBeSupported()
     {
         if (!ps_xPlaywrightConfModel.Headed)
             throw new XTestNotSupportedUponHeadlessModeException(
@@ -130,7 +130,7 @@ internal class XLogInTests : AXTATestFoundation
 
     [OneTimeSetUp]
     public static void s_XMetaSetUp() 
-        => XSingletonFactory.s_Register<XTANavigationKit>();
+        => XSingletonFactory.s_DaVinci<XTANavigationKit>();
 
     [SetUp]
     public async Task XMegaSetUp()
