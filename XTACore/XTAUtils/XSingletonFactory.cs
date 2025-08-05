@@ -12,7 +12,7 @@ public static class XSingletonFactory
 
     #region Introduce global singleton services
     
-    public static void s_Register<XService>() where XService : new() 
+    public static void s_Register<XService>() where XService : new()
         => msr_xSingletonServices.TryAdd(typeof(XService), new Lazy<object>(() => new XService(), LazyThreadSafetyMode.ExecutionAndPublication));
     
     public static void s_Register<XService>(XService in_xInstance) 

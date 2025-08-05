@@ -20,6 +20,7 @@ namespace XTAClient.XTATests.XOnboardingExperience;
 #region XLogInTests > Class level
 
 [Parallelizable(ParallelScope.Children)]
+[FixtureLifeCycle(LifeCycle.SingleInstance)]
 [TestFixture]
 internal class XLogInTests : AXTATestFoundation
 {

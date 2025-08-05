@@ -6,22 +6,9 @@ using XTAPlaywright.XConstHouse;
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XAppleOAuthModal : AXModal
+public class XAppleOAuthModal(IPage in_xAppleOAuthModal) 
+    : AXModal<XAppleOAuthMOs>(in_xAppleOAuthModal, XSingletonFactory.s_DaVinci<XAppleOAuthMOs>())
 {
-    #region Introduce constructors
-
-    public XAppleOAuthModal(IPage in_xAppleOAuthModal) => mr_xAppleOAuthModal = in_xAppleOAuthModal;
-
-    #endregion Introduce constructors
-    
-    #region Introduce class vars
-    
-    private readonly IPage mr_xAppleOAuthModal = default!;
-    
-    private readonly XAppleOAuthMOs mr_xAppleOAuthMOs = XSingletonFactory.s_DaVinci<XAppleOAuthMOs>();
-    
-    #endregion Introduce class vars
-
     #region Introduce verifications
 
     public async Task VerifyXAppleOAuthModalPresentedAsync()
@@ -29,8 +16,8 @@ public class XAppleOAuthModal : AXModal
         await pr_xtaWebUISharedVerifiers
             .VerifyIfElementIsVisibleWithWaitsAsync(
                 
-                mr_xAppleOAuthModal, 
-                mr_xAppleOAuthMOs.IC_X_APP_LOGO,
+                pr_xPage, 
+                pr_xPOs.IC_X_APP_LOGO,
                 new LocatorAssertionsToBeVisibleOptions
                 {
                     Timeout = XTimedoutConsts.MED_ELEMENT_TIMEOUT_MS
@@ -38,7 +25,7 @@ public class XAppleOAuthModal : AXModal
                 );
         
         await pr_xtaWebUISharedVerifiers
-            .VerifyIfElementIsVisibleWithWaitsAsync(mr_xAppleOAuthModal, mr_xAppleOAuthMOs.TXT_APPLE_ID_EMAIL);
+            .VerifyIfElementIsVisibleWithWaitsAsync(pr_xPage, pr_xPOs.TXT_APPLE_ID_EMAIL);
     }
 
     #endregion Introduce verifications

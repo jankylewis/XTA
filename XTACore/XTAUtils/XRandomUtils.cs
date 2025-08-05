@@ -16,7 +16,11 @@ public class XRandomUtils
         if (in_min > in_max)
             throw new ArgumentException("Min Length cannot be greater than Max Length.        ");
 
-        const string CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const string CHAR_POOL =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+            "abcdefghijklmnopqrstuvwxyz" +
+            "0123456789" +
+            @"!""#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
         
         int len = RandomNumberGenerator.GetInt32(in_min, in_max + 1);
         
@@ -30,6 +34,4 @@ public class XRandomUtils
         
         return new string(buffer);
     }
-    
-    
 }

@@ -1,20 +1,21 @@
-using XTACore.XTAUtils;
+using XTADomain.XTAPageObjects.XPOAbstractions;
 using XTADomain.XTAPageObjects.XPOUtils;
 
 namespace XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
 
-internal class XGoogleOAuthMOs
+public class XGoogleOAuthMOs : AXMOs
 {
-    internal XGoogleOAuthMOs() {}
+    public XGoogleOAuthMOs() {}
     
-    private readonly XPOSharedUtils mr_xPOSharedUtils = XSingletonFactory.s_DaVinci<XPOSharedUtils>();
-
     internal string TXT_EMAIL 
-        => mr_xPOSharedUtils.BuildSelector("identifierId", ELocatingMechanism.ID);
+        => pr_xPOSharedUtils.BuildSelector("identifierId", ELocatingMechanism.ID);
+    
     internal String BTN_FORGOT_EMAIL 
-        => mr_xPOSharedUtils.BuildSelector("//button[text()='Forgot email?']", ELocatingMechanism.XPATH);
+        => pr_xPOSharedUtils.BuildSelector("//button[text()='Forgot email?']", ELocatingMechanism.XPATH);
+    
     internal String BTN_NEXT 
-        => mr_xPOSharedUtils.BuildSelector("//button[span[text()='Next']]", ELocatingMechanism.XPATH);
+        => pr_xPOSharedUtils.BuildSelector("//button[span[text()='Next']]", ELocatingMechanism.XPATH);
+    
     internal String BTN_CREATE_ACCOUNT
-        => mr_xPOSharedUtils.BuildSelector("//button[span[text()='Create account']]", ELocatingMechanism.XPATH);
+        => pr_xPOSharedUtils.BuildSelector("//button[span[text()='Create account']]", ELocatingMechanism.XPATH);
 }

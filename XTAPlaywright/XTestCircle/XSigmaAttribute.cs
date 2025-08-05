@@ -44,13 +44,13 @@ public class XSigmaAttribute : Attribute, ITestAction
         }
         catch (TargetInvocationException tie)
         {
-            throw new XZetaNotQualifiedException(
+            throw new XSigmaNotQualifiedException(
                 $"Sigma method: {in_xSigma} threw an exception.\nOriginal: {tie}",
                 tie.InnerException ?? tie);
         }
         catch (Exception ex)
         {
-            throw new XZetaNotQualifiedException(
+            throw new XSigmaNotQualifiedException(
                 $"Failed to execute Sigma method <{in_xSigma}>: {ex.Message}", ex);
         }
     }

@@ -2,7 +2,10 @@ using XTAClient.XTATests.XTATestFoundation;
 using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
+using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience.XHomeExperienceModals;
+using XTADomain.XTAModels.XCoreExperience;
 using XTADomain.XTASharedActions;
+using XTAPlaywright.XExceptions;
 using XTAPlaywright.XTestCircle;
 
 namespace XTAClient.XTATests.XCoreExperience;
@@ -10,44 +13,81 @@ namespace XTAClient.XTATests.XCoreExperience;
 #region XTweetingTests > Class level
 
 [Parallelizable(ParallelScope.Children)]
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 [TestFixture]
 internal class XTweetingTests : AXTATestFoundation
 {
+    #region Introduce class vars
+
+    private XUserProfilePage m_xUserProfilePage;
+    private XTweetModel m_xTweetModel;
+    private XHomePage m_xHomePage;
+    
+    #endregion Introduce class vars
+    
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    [XSigma(nameof(_xSigma_RemoveTweet))]
+    [XZeta(nameof(_DeleteAllTweets), nameof(_NavigateToBaseXURL))]
+    [XSigma(nameof(_xSigma_DeleteATweet))]
     public async Task XUITest_NavigateToXHomePage_MakeATextBasedTweet_VerifyTweetSuccessfullyCreated()
     {
-        XHomePage xHomePage = new(p_xPage);
+        m_xTweetModel = new()
+        {
+            TweetContent = XSingletonFactory.s_DaVinci<XRandomUtils>().GenRandomString(12, 170)
+        };
+        
+        await m_xHomePage.ClickOnPostBtnAsync();
+        await m_xHomePage.FillPostContentAsync(m_xTweetModel.TweetContent);
+        await m_xHomePage.ClickOnPostTweetBtnAsync();
 
-        await xHomePage.ClickOnPostBtnAsync();
-        await xHomePage.FillPostContentAsync(XSingletonFactory.s_DaVinci<XRandomUtils>().GenRandomString(17, 61));
-        await xHomePage.ClickOnPostTweetBtnAsync();
-
-        await new XUserProfilePage(p_xPage).VerifyAnXPostSuccessfullyCreated();
+        await m_xHomePage.ClickOnProfileNavAsync();
+        
+        await m_xUserProfilePage.VerifyAnXPostSuccessfullyCreated(m_xTweetModel);
     }
 
+    [Test]
+    [Order(XTestEchelon.ALPHA)]
+    [Category(XTestSet.XUI_STANDARD_MODE)]
+    // [XSigma(nameof(_xSigma_RemoveTweet))]
+    public async Task XUITest_NavigateToXHomePage_MakeATweetHavingEmojis_VerifyTweetSuccessfullyCreated()
+    {
+    }
+    
     #region Introduce private methods
 
-    private async Task _xSigma_RemoveTweet()
+    private async Task _xSigma_DeleteATweet()
     {
-           
+        await m_xUserProfilePage.ClickOnDeleteBtnAsync();
+        await new XDeletePostModal(p_xPage).ClickOnDeletePostBtnAsync();
     }
+
+    private async Task _DeleteAllTweets()
+    {
+        m_xUserProfilePage = new XUserProfilePage(p_xPage);
+        m_xHomePage = new XHomePage(p_xPage);
+        
+        await m_xHomePage.ClickOnProfileNavAsync();
+        
+        if (await m_xUserProfilePage.CheckWhetherAnyTweet())
+            if (!await m_xUserProfilePage.DeleteAllTweetsAsync())
+                throw new XTestBusinessFlowException("The process of deleting all existing tweets got unexpected problems. Please have checks!      ");
+    }
+
+    private async Task _NavigateToBaseXURL() 
+        => await XSingletonFactory
+            .s_Retrieve<XTANavigationKit>()
+            .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
 
     #endregion Introduce private methods
     
     #region Introduce NUnit SetUp phase
 
     [OneTimeSetUp]
-    public static void s_XMetaSetUp() 
-        => XSingletonFactory.s_DaVinci<XTANavigationKit>();
-
+    public static void s_XMetaSetUp() {}
+    
     [SetUp]
-    public async Task XMegaSetUp()
-        => await XSingletonFactory
-            .s_Retrieve<XTANavigationKit>()
-            .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
+    public async Task XMegaSetUp() => await p_LogInToXAsync();
     
     #endregion Introduce NUnit SetUp phase
 }

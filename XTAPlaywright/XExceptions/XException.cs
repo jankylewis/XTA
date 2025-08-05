@@ -62,3 +62,10 @@ public class XTestNotSupportedUponHeadlessModeException : XException
     public XTestNotSupportedUponHeadlessModeException(string in_message) : base(in_message) {}
     public XTestNotSupportedUponHeadlessModeException(string in_message, Exception in_innerException) : base(in_message) {}   
 }
+
+public class XTestBusinessFlowException : XException
+{
+    public XTestBusinessFlowException() {}
+    public XTestBusinessFlowException(string in_message) : base(in_message) {}
+    public XTestBusinessFlowException(string in_message, Exception in_innerException) : base(in_message) {}
+}
