@@ -5,7 +5,7 @@ namespace XTADomain.XTASharedActions;
 
 public class XTAWebUISharedVerifiers
 {
-    internal XTAWebUISharedVerifiers() {}
+    public XTAWebUISharedVerifiers() {}
     
     internal async Task VerifyIfTextContentMatchedAsync(IPage in_xPage, string in_selector, string in_expectedText) 
         => (await in_xPage.TextContentAsync(in_selector)).Should().Be(in_expectedText);

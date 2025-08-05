@@ -5,8 +5,9 @@ using Microsoft.Playwright;
 using XTAClient.XTATests.XTATestFoundation;
 using XTACore.XTAUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
+using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience;
-using XTADomain.XTABusinesses.XOnboardingExperience.XModals;
+using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
 using XTAPlaywright.XExceptions;
@@ -19,6 +20,7 @@ namespace XTAClient.XTATests.XOnboardingExperience;
 #region XLogInTests > Class level
 
 [Parallelizable(ParallelScope.Children)]
+[FixtureLifeCycle(LifeCycle.SingleInstance)]
 [TestFixture]
 internal class XLogInTests : AXTATestFoundation
 {
@@ -27,7 +29,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePage()
+    public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePage()
     {
         XAccountModel xAccountModel = new()
         {
@@ -57,7 +59,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayed()
+    public async Task XUITest_NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayed()
     {
         await new XLogInPage(p_xPage).ClickOnSignInBtnAsync();
         await new XSignInToXModal(p_xPage).VerifyIfSignInToXModalDisplayedAsync();
@@ -66,14 +68,14 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
-    [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
-    public async Task NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
+    [XZeta(nameof(m_xZeta_AsObservedToNotBeSupported))]
+    public async Task XUITest_NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
 
         IPage? xAppleOAuthPopup = default;
 
-        await XSingletonFactory.s_DaVinciResolve<XRetryUtils>()
+        await XSingletonFactory.s_DaVinci<XRetryUtils>()
             .RetryAsync(async () =>
             {
                 Task<IPage> xOAuthPopupListener = xLogInPage.GenXOAuthPopupListener();
@@ -95,8 +97,8 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
-    [XPrerequisites(nameof(_AsObservedToNotBeSupported))]
-    public async Task NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
+    [XZeta(nameof(m_xZeta_AsObservedToNotBeSupported))]
+    public async Task XUITest_NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
 
@@ -116,7 +118,7 @@ internal class XLogInTests : AXTATestFoundation
 
     #region Private services
 
-    private void _AsObservedToNotBeSupported()
+    private void m_xZeta_AsObservedToNotBeSupported()
     {
         if (!ps_xPlaywrightConfModel.Headed)
             throw new XTestNotSupportedUponHeadlessModeException(
@@ -129,7 +131,7 @@ internal class XLogInTests : AXTATestFoundation
 
     [OneTimeSetUp]
     public static void s_XMetaSetUp() 
-        => XSingletonFactory.s_Register<XTANavigationKit>();
+        => XSingletonFactory.s_DaVinci<XTANavigationKit>();
 
     [SetUp]
     public async Task XMegaSetUp()

@@ -5,7 +5,7 @@ namespace XTADomain.XTASharedActions;
 
 public class XTAWebUIWaitStrategies
 {
-    internal XTAWebUIWaitStrategies() {}
+    public XTAWebUIWaitStrategies() {}
     
     internal async Task WaitForElementToBeVisibleAsync(
         IPage in_xPage, string in_selector, LocatorWaitForOptions? in_waitForOptions = default) 

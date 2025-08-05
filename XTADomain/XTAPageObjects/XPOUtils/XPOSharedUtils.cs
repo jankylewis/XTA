@@ -5,7 +5,7 @@ namespace XTADomain.XTAPageObjects.XPOUtils;
 
 public class XPOSharedUtils
 {
-    internal XPOSharedUtils(){}
+    public XPOSharedUtils(){}
     
     internal String BuildSelector(string in_selector, ELocatingMechanism in_locatingMechanism)
         => in_locatingMechanism switch
