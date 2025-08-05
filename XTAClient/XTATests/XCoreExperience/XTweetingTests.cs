@@ -45,14 +45,6 @@ internal class XTweetingTests : AXTATestFoundation
         
         await m_xUserProfilePage.VerifyAnXPostSuccessfullyCreated(m_xTweetModel);
     }
-
-    [Test]
-    [Order(XTestEchelon.ALPHA)]
-    [Category(XTestSet.XUI_STANDARD_MODE)]
-    // [XSigma(nameof(_xSigma_RemoveTweet))]
-    public async Task XUITest_NavigateToXHomePage_MakeATweetHavingEmojis_VerifyTweetSuccessfullyCreated()
-    {
-    }
     
     #region Introduce private methods
 
