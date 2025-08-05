@@ -26,10 +26,10 @@ public class XRandomUtils
         
         Span<char> buffer = stackalloc char[len];
         
-        for (int i = 0; i < len; i++)
+        for (int l_idx = 0; l_idx < len; l_idx++)
         {
             int index = RandomNumberGenerator.GetInt32(CHAR_POOL.Length);
-            buffer[i] = CHAR_POOL[index];
+            buffer[l_idx] = CHAR_POOL[index];
         }
         
         return new string(buffer);

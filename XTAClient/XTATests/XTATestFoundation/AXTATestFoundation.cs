@@ -29,8 +29,8 @@ internal abstract partial class AXTATestFoundation
     protected static XAppConfModel ps_xAppConfModel;
     protected static XPlwConfModel ps_xPlaywrightConfModel;
     
-    protected IPage p_xPage => _TakeCurrentXPage();
-    protected IBrowserContext p_xBrContext => _TakeCurrentXBrowserContext();
+    protected IPage p_xPage => m_TakeCurrentXPage();
+    protected IBrowserContext p_xBrContext => m_TakeCurrentXBrowserContext();
     
     #endregion Introduce foundational vars
 
@@ -101,13 +101,13 @@ internal abstract partial class AXTATestFoundation
     
     #region Introduce private services
 
-    private IPage _TakeCurrentXPage() 
+    private IPage m_TakeCurrentXPage() 
         => ms_xPlwAdapterModel.XPages.TryGetValue(p_xTestMetaKey, out IPage a_xPage) 
             ? a_xPage 
             : throw new XPageNotInitializedException(
                 $"Page not initialized for test method '{p_xTestMetaKey}'");
     
-    private IBrowserContext _TakeCurrentXBrowserContext()
+    private IBrowserContext m_TakeCurrentXBrowserContext()
         => ms_xPlwAdapterModel.XBrowserContexts.TryGetValue(p_xTestMetaKey, out IBrowserContext a_xBrContext)
             ? a_xBrContext
             : throw new XBrowserContextNotInitializedException(

@@ -32,7 +32,7 @@ public class XLogInPage(IPage in_xPage)
 
     public async Task ClickOnSignInWithAppleBtnAsync()
     {
-        await _WaitForXOAuthBtnToBeReadyAsync(mr_xLogInPOs.BTN_SIGN_IN_WITH_APPLE);
+        await m_WaitForXOAuthBtnToBeReadyAsync(mr_xLogInPOs.BTN_SIGN_IN_WITH_APPLE);
         await mr_xtaWebUISharedActions.ClickAsync(in_xPage, mr_xLogInPOs.BTN_SIGN_IN_WITH_APPLE);
     }
     
@@ -42,7 +42,7 @@ public class XLogInPage(IPage in_xPage)
             Timeout = 2700
         });
 
-    private async Task _WaitForXOAuthBtnToBeReadyAsync(string in_xOAuthBtnSelector)
+    private async Task m_WaitForXOAuthBtnToBeReadyAsync(string in_xOAuthBtnSelector)
     {
         await mr_xtaWebUIJSWaitStrategies.WaitForJSFuncAsync(in_xPage, mr_appleSDKExistenceCheckJSFunc);
         await mr_xtaWebUIWaitStrategies.WaitForElementToBeClickableAsync(in_xPage, in_xOAuthBtnSelector);

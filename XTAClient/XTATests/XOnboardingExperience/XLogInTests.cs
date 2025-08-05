@@ -68,7 +68,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
-    [XZeta(nameof(_xZeta_AsObservedToNotBeSupported))]
+    [XZeta(nameof(m_xZeta_AsObservedToNotBeSupported))]
     public async Task XUITest_NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
@@ -97,7 +97,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
-    [XZeta(nameof(_xZeta_AsObservedToNotBeSupported))]
+    [XZeta(nameof(m_xZeta_AsObservedToNotBeSupported))]
     public async Task XUITest_NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
     {
         XLogInPage xLogInPage = new(p_xPage);
@@ -118,7 +118,7 @@ internal class XLogInTests : AXTATestFoundation
 
     #region Private services
 
-    private void _xZeta_AsObservedToNotBeSupported()
+    private void m_xZeta_AsObservedToNotBeSupported()
     {
         if (!ps_xPlaywrightConfModel.Headed)
             throw new XTestNotSupportedUponHeadlessModeException(

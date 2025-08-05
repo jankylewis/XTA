@@ -23,10 +23,10 @@ public class XSigmaAttribute : Attribute, ITestAction
         Type? testClass = testInstance?.GetType();
 
         foreach (string l_xSigma in mr_xSigmas)
-            _ExecuteXSigma(testInstance, testClass!, l_xSigma);
+            m_ExecuteXSigma(testInstance, testClass!, l_xSigma);
     }
 
-    private static void _ExecuteXSigma(object? in_xTestInstance, Type in_xTestClass, string in_xSigma)
+    private void m_ExecuteXSigma(object? in_xTestInstance, Type in_xTestClass, string in_xSigma)
     {
         try
         {

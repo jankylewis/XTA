@@ -22,12 +22,12 @@ public class XZetaAttribute : Attribute, ITestAction
         Type? xTestClass = xTestInstance?.GetType();
 
         foreach (string l_xZeta in mr_xTestZetas)
-            _ExecuteXZeta(xTestInstance, xTestClass!, l_xZeta);
+            m_ExecuteXZeta(xTestInstance, xTestClass!, l_xZeta);
     }
 
     public void AfterTest(ITest in_xTest) {}
 
-    private void _ExecuteXZeta(
+    private void m_ExecuteXZeta(
         object in_xTestInstance, Type in_xTestClass, string in_xTestMethodName)
     {
         try

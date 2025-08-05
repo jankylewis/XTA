@@ -28,8 +28,8 @@ internal class XTweetingTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    [XZeta(nameof(_DeleteAllTweets), nameof(_NavigateToBaseXURL))]
-    [XSigma(nameof(_xSigma_DeleteATweet))]
+    [XZeta(nameof(m_xZeta_DeleteAllTweets), nameof(m_xZeta_NavigateToBaseXURL))]
+    [XSigma(nameof(m_xSigma_DeleteATweet))]
     public async Task XUITest_NavigateToXHomePage_MakeATextBasedTweet_VerifyTweetSuccessfullyCreated()
     {
         m_xTweetModel = new()
@@ -48,13 +48,13 @@ internal class XTweetingTests : AXTATestFoundation
     
     #region Introduce private methods
 
-    private async Task _xSigma_DeleteATweet()
+    private async Task m_xSigma_DeleteATweet()
     {
         await m_xUserProfilePage.ClickOnDeleteBtnAsync();
         await new XDeletePostModal(p_xPage).ClickOnDeletePostBtnAsync();
     }
 
-    private async Task _DeleteAllTweets()
+    private async Task m_xZeta_DeleteAllTweets()
     {
         m_xUserProfilePage = new XUserProfilePage(p_xPage);
         m_xHomePage = new XHomePage(p_xPage);
@@ -66,7 +66,7 @@ internal class XTweetingTests : AXTATestFoundation
                 throw new XTestBusinessFlowException("The process of deleting all existing tweets got unexpected problems. Please have checks!      ");
     }
 
-    private async Task _NavigateToBaseXURL() 
+    private async Task m_xZeta_NavigateToBaseXURL() 
         => await XSingletonFactory
             .s_Retrieve<XTANavigationKit>()
             .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
