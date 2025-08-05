@@ -22,7 +22,7 @@ public class XTestAdapter : IXTestAdapter
         };
     
         XTestMetaKey = in_testMetaKey;
-        XTestCorrelationID = $"{browserPrefix}_{new XRandomUtils().GenGuid()}";
+        XTestCorrelationID = $"{browserPrefix}_{XSingletonFactory.s_DaVinci<XRandomUtils>().GenGuid()}";
     
         return this;
     }

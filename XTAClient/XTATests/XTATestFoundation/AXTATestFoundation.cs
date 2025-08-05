@@ -85,7 +85,7 @@ internal abstract partial class AXTATestFoundation
             && msr_xTestAdapters.TryRemove(p_xTestMetaKey, out var a_xTestAdapter))
         {
             ms_xPlwAdapterModel = await ms_xPlwEngineer
-                .UnplugMultiCoreCableFromXAdapter(a_xPlwMultiCableModel, ms_xPlwAdapterModel, a_xTestAdapter);
+                .UnplugMultiCoreCableFromXAdapterAsync(a_xPlwMultiCableModel, ms_xPlwAdapterModel, a_xTestAdapter);
         }
     }
 

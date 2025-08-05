@@ -47,7 +47,7 @@ public class XPlwEngineer(XPlwConfModel in_xPlwConfModel)
         ) 
             => await new XPlwPowerSource(in_xPlwSingleCoreCableModel, in_xPlwAdapterModel).DisposeAsync();
 
-    public async Task<XPlwAdapterModel> UnplugMultiCoreCableFromXAdapter(
+    public async Task<XPlwAdapterModel> UnplugMultiCoreCableFromXAdapterAsync(
         XPlwMultiCoreCableModel in_xPlwMultiCoreCableModel, XPlwAdapterModel in_xPlwAdapterModel, IXTestAdapter in_xTestAdapter)
     {
         await in_xPlwMultiCoreCableModel.XPage.CloseAsync();
