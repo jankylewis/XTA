@@ -4,10 +4,10 @@ using XTAClient.XTATests.XTATestFoundation;
 public sealed class XTAPlwBootstrapper
 {
     [OneTimeSetUp]
-    public static async Task s_XGlobalBoot() 
-        => await AXTATestFoundation.s_XAlphaSetUp();
+    public static async Task s_XGlobalBootAsync() 
+        => await AXTATestFoundation.s_XAlphaSetUpAsync();
     
     [OneTimeTearDown]
-    public static async Task s_XGlobalShutdown() 
-        => await AXTATestFoundation.s_XAlphaTearDown();
+    public static async Task s_XGlobalShutdownAsync() 
+        => await AXTATestFoundation.s_XAlphaTearDownAsync();
 }

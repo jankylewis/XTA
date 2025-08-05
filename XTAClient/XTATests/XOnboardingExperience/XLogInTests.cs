@@ -29,7 +29,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePage()
+    public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePageAsync()
     {
         XAccountModel xAccountModel = new()
         {
@@ -59,7 +59,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task XUITest_NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayed()
+    public async Task XUITest_NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayedAsync()
     {
         await new XLogInPage(p_xPage).ClickOnSignInBtnAsync();
         await new XSignInToXModal(p_xPage).VerifyIfSignInToXModalDisplayedAsync();
@@ -69,7 +69,7 @@ internal class XLogInTests : AXTATestFoundation
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
     [XZeta(nameof(m_xZeta_AsObservedToNotBeSupported))]
-    public async Task XUITest_NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresented()
+    public async Task XUITest_NavigateToXLogInPage_SignInWithApple_VerifyXAppleOAuthModalPresentedAsync()
     {
         XLogInPage xLogInPage = new(p_xPage);
 
@@ -98,7 +98,7 @@ internal class XLogInTests : AXTATestFoundation
     [Order(XTestEchelon.HYPER)]
     [Category(XTestSet.XUI_LOCAL_MODE)]
     [XZeta(nameof(m_xZeta_AsObservedToNotBeSupported))]
-    public async Task XUITest_NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresented()
+    public async Task XUITest_NavigateToXLogInPage_SignInWithGoogle_VerifyXAppleOAuthModalPresentedAsync()
     {
         XLogInPage xLogInPage = new(p_xPage);
 
@@ -134,7 +134,7 @@ internal class XLogInTests : AXTATestFoundation
         => XSingletonFactory.s_DaVinci<XTANavigationKit>();
 
     [SetUp]
-    public async Task XMegaSetUp()
+    public async Task XMegaSetUpAsync()
         => await XSingletonFactory.s_Retrieve<XTANavigationKit>()
             .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
     
