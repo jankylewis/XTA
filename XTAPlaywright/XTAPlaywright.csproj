@@ -10,7 +10,9 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Playwright" Version="1.53.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="NUnit" Version="4.2.2" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
         <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 
