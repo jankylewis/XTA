@@ -14,7 +14,7 @@ internal class XLogOutTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task XUITest_LoggedInToX_ClickOnLogOutButton_VerifySuccessfullyLogOutAsync()
+    public async Task XUITest_LoggedInToX_ClickOnLogOutButton_VerifySuccessfullyLoggedOutAsync()
     {
         await new XHomePage(p_xPage).DoLogOutOfXAsync();
         await new XLogOutOfXModal(p_xPage).ClickOnLogOutBtnAsync();

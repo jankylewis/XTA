@@ -29,7 +29,7 @@ internal class XLogInTests : AXTATestFoundation
     [Test]
     [Order(XTestEchelon.ALPHA)]
     [Category(XTestSet.XUI_STANDARD_MODE)]
-    public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePageAsync()
+    public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLoggedInAndBeLandedOnHomePageAsync()
     {
         XAccountModel xAccountModel = new()
         {
