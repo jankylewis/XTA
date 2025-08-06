@@ -14,6 +14,8 @@ internal abstract partial class AXTATestFoundation
         XSignInToXModal xSignInToXModal = new(p_xPage);
         XEnterYourPasswordModal xEnterYourPasswordModal = new(p_xPage);
         XUnusualLogInModal xUnusualLogInModal = new(p_xPage);
+
+        var x = await p_TakeIdleXAccountCredAsync();
         
         await XSingletonFactory
             .s_DaVinci<XTANavigationKit>()

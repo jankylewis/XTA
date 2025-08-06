@@ -1,5 +1,5 @@
 
-using XTAPlaywright.XExceptions;
+using XTAInfras.XExceptions;
 
 namespace XTADomain.XTAPageObjects.XPOUtils;
 

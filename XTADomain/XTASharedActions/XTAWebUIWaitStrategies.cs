@@ -1,5 +1,5 @@
 using Microsoft.Playwright;
-using XTAPlaywright.XConstHouse;
+using XTAInfras.XConstHouse;
 
 namespace XTADomain.XTASharedActions;
 
