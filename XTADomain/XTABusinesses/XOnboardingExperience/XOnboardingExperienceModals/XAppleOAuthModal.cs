@@ -6,8 +6,8 @@ using XTAPlaywright.XConstHouse;
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XAppleOAuthModal(IPage in_xAppleOAuthModal) 
-    : AXModal<XAppleOAuthMOs>(in_xAppleOAuthModal, XSingletonFactory.s_DaVinci<XAppleOAuthMOs>())
+public class XAppleOAuthModal(IPage in_xPage) 
+    : AXModal<XAppleOAuthMOs>(in_xPage, XSingletonFactory.s_DaVinci<XAppleOAuthMOs>())
 {
     #region Introduce verifications
 

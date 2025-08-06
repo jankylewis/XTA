@@ -5,8 +5,8 @@ using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XEnterYourPasswordModal(IPage in_xEnterYourPasswordModal) 
-    : AXModal<XEnterYourPasswordMOs>(in_xEnterYourPasswordModal, XSingletonFactory.s_DaVinci<XEnterYourPasswordMOs>())
+public class XEnterYourPasswordModal(IPage in_xPage) 
+    : AXModal<XEnterYourPasswordMOs>(in_xPage, XSingletonFactory.s_DaVinci<XEnterYourPasswordMOs>())
 {
     #region Introduce actions
 

@@ -13,7 +13,7 @@ public abstract class AXPOs
 
     #region Introduce shared UI elements
 
-    #region Introduce banner elements
+    #region Introduce Banner elements
 
     internal String LNK_HOME 
         => pr_xPOSharedUtils.BuildSelector("a[data-testid='AppTabBar_Home_Link']", ELocatingMechanism.CSS);
@@ -27,12 +27,21 @@ public abstract class AXPOs
     internal String BTN_TWEET
         => pr_xPOSharedUtils.BuildSelector("button[data-testid='tweetButton']", ELocatingMechanism.CSS);
 
-    #endregion Introduce banner elements
+    #endregion Introduce Banner elements
     
     internal String SHARED_NAV(String in_xProfile) 
-        => pr_xPOSharedUtils.BuildSelector($"nav[role='navigation'] a[data-testid='{in_xProfile}']"
-            , ELocatingMechanism.CSS);
+        => pr_xPOSharedUtils.BuildSelector($"nav[role='navigation'] a[data-testid='{in_xProfile}']", ELocatingMechanism.CSS);
 
+    #region Introduce Account Switcher elements
+    
+    internal String BTN_ACCOUNT_SWITCHER
+        => pr_xPOSharedUtils.BuildSelector("button[data-testid='SideNav_AccountSwitcher_Button']", ELocatingMechanism.CSS);
+
+    internal String BTN_LOGOUT
+        => pr_xPOSharedUtils.BuildSelector("a[data-testid='AccountSwitcher_Logout_Button']", ELocatingMechanism.CSS);
+
+    #endregion Introduce Account Switcher elements
+    
     #endregion Introduce shared UI elements
 
     #region Introduce element utilities

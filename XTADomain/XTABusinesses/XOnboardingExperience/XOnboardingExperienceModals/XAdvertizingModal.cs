@@ -5,5 +5,5 @@ using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XAdvertizingModal(IPage in_xAdvertizingModal) 
-    : AXModal<XAdvertizingMOs>(in_xAdvertizingModal, XSingletonFactory.s_DaVinci<XAdvertizingMOs>()) {}
+public class XAdvertizingModal(IPage in_xPage) 
+    : AXModal<XAdvertizingMOs>(in_xPage, XSingletonFactory.s_DaVinci<XAdvertizingMOs>()) {}
