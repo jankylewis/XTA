@@ -10,8 +10,8 @@ using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
-using XTAPlaywright.XExceptions;
-using XTAPlaywright.XTestCircle;
+using XTAInfras.XExceptions;
+using XTAInfras.XTestCircle;
 
 #endregion Import statements
 

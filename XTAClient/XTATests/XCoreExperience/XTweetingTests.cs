@@ -5,8 +5,8 @@ using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience.XHomeExperienceModals;
 using XTADomain.XTAModels.XCoreExperience;
 using XTADomain.XTASharedActions;
-using XTAPlaywright.XExceptions;
-using XTAPlaywright.XTestCircle;
+using XTAInfras.XExceptions;
+using XTAInfras.XTestCircle;
 
 namespace XTAClient.XTATests.XCoreExperience;
 

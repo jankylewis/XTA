@@ -1,13 +1,15 @@
 using Microsoft.Playwright;
-using XTAPlaywright.XConfFactories.XConfFactories;
-using XTAPlaywright.XConfFactories.XConfModels;
-using XTAPlaywright.XExceptions;
-using XTAPlaywright.XPlwCircle;
-using XTAPlaywright.XPlwCircle.XPlwAdapter;
-using XTAPlaywright.XPlwCircle.XPlwCable.XPlwCableModels;
-using XTAPlaywright.XTestCircle;
+using XTAInfras.XConfFactories.XConfFactories;
+using XTAInfras.XConfFactories.XConfModels;
+using XTAInfras.XExceptions;
+using XTAInfras.XPlwCircle;
+using XTAInfras.XPlwCircle.XPlwAdapter;
+using XTAInfras.XPlwCircle.XPlwCable.XPlwCableModels;
+using XTAInfras.XTestCircle;
 using System.Collections.Concurrent;
+using RabbitMQ.Client;
 using XTACore.XTAUtils;
+using XTAInfras.XRabbitMQCircle;
 
 namespace XTAClient.XTATests.XTATestFoundation;
 
@@ -16,7 +18,9 @@ internal abstract partial class AXTATestFoundation
     #region Introduce foundational vars
     
     protected string p_xTestMetaKey => TestContext.CurrentContext.Test.MethodName!;
-
+    
+    private static XRabbitMQManager ms_xRabbitMQManager;
+    
     private static XPlwSingleCoreCableModel ms_xPlwSingleCoreCableModel;
     
     private static readonly ConcurrentDictionary<string, XPlwMultiCoreCableModel> msr_xPlwMultiCoreCableModels = new();
@@ -28,6 +32,10 @@ internal abstract partial class AXTATestFoundation
     
     protected static XAppConfModel ps_xAppConfModel;
     protected static XPlwConfModel ps_xPlaywrightConfModel;
+    protected static XAppAccountCredConfModel ps_xAppAccountCredConfModel;
+
+    protected async Task<XAccountCredModel?> p_TakeIdleXAccountCredAsync() 
+        => await ms_xRabbitMQManager.GetIdleXAccountCreds();
     
     protected IPage p_xPage => m_TakeCurrentXPage();
     protected IBrowserContext p_xBrContext => m_TakeCurrentXBrowserContext();
@@ -40,10 +48,20 @@ internal abstract partial class AXTATestFoundation
     
     public static async Task s_XAlphaSetUpAsync() 
     {
-        ps_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlaywrightConfModel();
+        ps_xAppAccountCredConfModel = XAppAccountCredConfFactory.s_LoadXAppAccountCredConfModel();
+        ps_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlwConfModel();
         ps_xAppConfModel = XAppConfFactory.s_LoadXAppConfModel();
-        
+
+        ms_xRabbitMQManager = new();
         ms_xPlwEngineer = new(ps_xPlaywrightConfModel);
+
+        await ms_xRabbitMQManager
+            .PushAllXAccountCredsAsync(ps_xAppAccountCredConfModel.XTestAccounts, new ConnectionFactory
+            {
+               HostName = "localhost",
+               RequestedHeartbeat = TimeSpan.FromSeconds(30),               // Quick detection
+               NetworkRecoveryInterval = TimeSpan.FromSeconds(5)            // Fast reconnect
+            });
         
         ms_xPlwSingleCoreCableModel = await ms_xPlwEngineer.GenXPlwSingleCoreCableModelAsync();
      

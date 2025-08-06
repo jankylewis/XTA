@@ -26,7 +26,7 @@ public class XTAWebUISharedVerifiers
         LocatorClickOptions locatorClickOpts = in_clickOptions ?? new LocatorClickOptions
         {
             Trial = true,
-            Timeout = XTAPlaywright.XConstHouse.XTimedoutConsts.MAX_ELEMENT_TIMEOUT_MS
+            Timeout = XTAInfras.XConstHouse.XTimedoutConsts.MAX_ELEMENT_TIMEOUT_MS
         };
 
         await in_xPage.Locator(in_selector).ClickAsync(locatorClickOpts);

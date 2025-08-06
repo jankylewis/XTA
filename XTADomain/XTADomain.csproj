@@ -13,7 +13,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\XTAPlaywright\XTAPlaywright.csproj" />
+      <ProjectReference Include="..\XTAInfras\XTAInfras.csproj" />
     </ItemGroup>
     
     <ItemGroup>
