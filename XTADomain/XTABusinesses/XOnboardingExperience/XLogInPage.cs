@@ -14,6 +14,7 @@ public class XLogInPage(IPage in_xPage)
     private readonly XTAWebUISharedActions mr_xtaWebUISharedActions = XSingletonFactory.s_DaVinci<XTAWebUISharedActions>();
     private readonly XTAWebUIWaitStrategies mr_xtaWebUIWaitStrategies = XSingletonFactory.s_DaVinci<XTAWebUIWaitStrategies>();
     private readonly XTAWebUIJSWaitStrategies mr_xtaWebUIJSWaitStrategies = XSingletonFactory.s_DaVinci<XTAWebUIJSWaitStrategies>();
+    private readonly XTAWebUISharedVerifiers mr_xtaWebUISharedVerifiers = XSingletonFactory.s_DaVinci<XTAWebUISharedVerifiers>();
     
     private readonly string mr_appleSDKExistenceCheckJSFunc 
         = "() => window.AppleID !== undefined && typeof window.AppleID.auth === 'object'";
@@ -25,6 +26,17 @@ public class XLogInPage(IPage in_xPage)
             }";
     #endregion Introduce class vars
 
+    #region Introduce verifications
+
+    public async Task VerifyWhetherXLogInPagePresentedAsync()
+    {
+        await mr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithWaitsAsync(in_xPage, mr_xLogInPOs.BTN_SIGN_IN);
+        await mr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithoutWaitsAsync(in_xPage, mr_xLogInPOs.BTN_SIGN_IN_WITH_APPLE);
+        await mr_xtaWebUISharedVerifiers.VerifyIfElementIsVisibleWithoutWaitsAsync(in_xPage, mr_xLogInPOs.BTN_SIGN_IN_WITH_GOOGLE);
+    }
+
+    #endregion Introduce verifications
+    
     #region Introduce actions
 
     public async Task ClickOnSignInBtnAsync() 

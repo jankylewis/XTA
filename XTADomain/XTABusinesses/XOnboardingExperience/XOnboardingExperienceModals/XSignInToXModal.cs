@@ -5,8 +5,8 @@ using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XSignInToXModal(IPage in_xSignInToXModal) 
-    : AXModal<XSignInToXMOs>(in_xSignInToXModal, XSingletonFactory.s_DaVinci<XSignInToXMOs>())
+public class XSignInToXModal(IPage in_xPage) 
+    : AXModal<XSignInToXMOs>(in_xPage, XSingletonFactory.s_DaVinci<XSignInToXMOs>())
 {
     #region Introduce actions
 

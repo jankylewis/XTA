@@ -6,8 +6,8 @@ using XTAPlaywright.XConstHouse;
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XGoogleOAuthModal(IPage in_xGoogleOAuthModal) 
-    : AXModal<XGoogleOAuthMOs>(in_xGoogleOAuthModal, XSingletonFactory.s_DaVinci<XGoogleOAuthMOs>())
+public class XGoogleOAuthModal(IPage in_xPage) 
+    : AXModal<XGoogleOAuthMOs>(in_xPage, XSingletonFactory.s_DaVinci<XGoogleOAuthMOs>())
 {
     #region Introduce verifications
 

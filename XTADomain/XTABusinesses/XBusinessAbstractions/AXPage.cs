@@ -41,6 +41,12 @@ public abstract class AXPage<XPOs> where XPOs : AXPOs
 
     public async Task ClickOnPostTweetBtnAsync()
         => await pr_xtaWebUISharedActions.ClickAsync(pr_xPage, pr_xPOs.BTN_TWEET);
+
+    public async Task DoLogOutOfXAsync()
+    {
+        await pr_xtaWebUISharedActions.ClickAsync(pr_xPage, pr_xPOs.BTN_ACCOUNT_SWITCHER);
+        await pr_xtaWebUISharedActions.ClickAsync(pr_xPage, pr_xPOs.BTN_LOGOUT);
+    }
     
     #endregion Introduce X-shared actions
 }

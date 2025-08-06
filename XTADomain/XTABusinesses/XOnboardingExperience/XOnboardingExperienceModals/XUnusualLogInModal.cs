@@ -5,8 +5,8 @@ using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 
-public class XUnusualLogInModal(IPage in_xUnusualLogInModal)
-    : AXModal<XUnusualLogInMOs>(in_xUnusualLogInModal, XSingletonFactory.s_DaVinci<XUnusualLogInMOs>())
+public class XUnusualLogInModal(IPage in_xPage)
+    : AXModal<XUnusualLogInMOs>(in_xPage, XSingletonFactory.s_DaVinci<XUnusualLogInMOs>())
 {
     #region Introduce verifications
 
