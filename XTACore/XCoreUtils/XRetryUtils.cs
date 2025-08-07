@@ -1,6 +1,6 @@
 using System.Runtime.ExceptionServices;
 
-namespace XTACore.XTAUtils;
+namespace XTACore.XCoreUtils;
 
 public class XRetryUtils
 {

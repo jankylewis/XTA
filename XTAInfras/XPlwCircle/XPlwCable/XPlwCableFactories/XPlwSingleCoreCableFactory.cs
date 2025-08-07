@@ -1,6 +1,6 @@
 using Microsoft.Playwright;
 using XTAInfras.XConfFactories.XConfModels;
-using XTAInfras.XExceptions;
+using XTAInfras.XInfrasExceptions;
 using XTAInfras.XPlwCircle.XPlwCable.XPlwCableModels;
 
 namespace XTAInfras.XPlwCircle.XPlwCable.XPlwCableFactories;

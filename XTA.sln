@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTADomain", "XTADomain\XTAD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTACore", "XTACore\XTACore.csproj", "{E5074176-95F8-485C-A8CC-F8B8F59ED8E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTAPlaywright", "XTAPlaywright\XTAPlaywright.csproj", "{947033F0-B1BC-4E40-BB92-622C3865A3FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTAInfras", "XTAInfras\XTAInfras.csproj", "{947033F0-B1BC-4E40-BB92-622C3865A3FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

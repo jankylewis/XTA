@@ -1,7 +1,7 @@
 using System.Reflection;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using XTAInfras.XExceptions;
+using XTAInfras.XInfrasExceptions;
 
 namespace XTAInfras.XTestCircle;
 

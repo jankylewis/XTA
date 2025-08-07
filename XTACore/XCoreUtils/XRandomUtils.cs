@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace XTACore.XTAUtils;
+namespace XTACore.XCoreUtils;
 
 public class XRandomUtils
 {

@@ -1,5 +1,5 @@
 using Microsoft.Playwright;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTAPageObjects.XPOAbstractions;
 using XTADomain.XTASharedActions;
 

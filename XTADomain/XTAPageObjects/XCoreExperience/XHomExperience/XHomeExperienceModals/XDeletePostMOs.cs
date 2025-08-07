@@ -1,4 +1,4 @@
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTAPageObjects.XPOUtils;
 
 namespace XTADomain.XTAPageObjects.XCoreExperience.XHomExperience.XHomeExperienceModals;
