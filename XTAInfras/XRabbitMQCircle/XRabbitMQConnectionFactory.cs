@@ -2,43 +2,32 @@ using RabbitMQ.Client;
 
 namespace XTAInfras.XRabbitMQCircle;
 
-internal class XRabbitMQConnectionFactory
+internal class XRabbitMQConnectionFactory : IAsyncDisposable
 {
     #region Introduce constructors
 
     public XRabbitMQConnectionFactory() {}
     
-    internal IConnection xRabbitMQConn;
-    internal IChannel xRabbitMQChann;
-
     #endregion Introduce constructors
 
-    #region Introduce RabbitMQ operations
+    private IConnection m_xRabbitMQConn;
     
-    internal async Task<IChannel> GenChannelAsync(IConnectionFactory? in_xConnFactory = default)
+    #region Introduce RabbitMQ operations
+
+    internal async Task<IConnection> GenConnectionAsync(IConnectionFactory? in_xConnFactory = default)
     {
-        IConnectionFactory xConnFactory = m_GenConnectionFactoryAsync(in_xConnFactory);
-        
-        xRabbitMQConn = await m_GenConnectionAsync(xConnFactory);
-        
-        return xRabbitMQChann = await m_GenChannelAsync(xRabbitMQConn);
+        IConnectionFactory xConnFacTory = in_xConnFactory ?? new ConnectionFactory { HostName = "localhost" };
+        return m_xRabbitMQConn = await xConnFacTory.CreateConnectionAsync();
     }
 
-    #region Introduce private services
-
-    private IConnectionFactory m_GenConnectionFactoryAsync(IConnectionFactory? in_xConnFactory = default)
-        => in_xConnFactory ?? new ConnectionFactory()
-        {
-            HostName = "localhost"
-        };
+    internal async Task<IChannel> GenChannelAsync(IConnectionFactory? in_xConnFactory = default)
+        => await m_xRabbitMQConn.CreateChannelAsync();
     
-    private async Task<IConnection> m_GenConnectionAsync(IConnectionFactory? in_xConnFactory = default) 
-        => await in_xConnFactory!.CreateConnectionAsync();
-
-    private async Task<IChannel> m_GenChannelAsync(IConnection in_xConn)
-        => await in_xConn.CreateChannelAsync();
-
-    #endregion Introduce private services
-
     #endregion Introduce RabbitMQ operations
+
+    #region Introduce RabbitMQ disposal
+
+    public async ValueTask DisposeAsync() => await m_xRabbitMQConn.CloseAsync();
+
+    #endregion Introduce RabbitMQ disposal
 }

@@ -2,15 +2,17 @@
 #region Import statements
 
 using Microsoft.Playwright;
+using RabbitMQ.Client;
 using XTAClient.XTATests.XTATestFoundation;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
-using XTAInfras.XExceptions;
+using XTAInfras.XConfFactories.XConfModels;
+using XTAInfras.XInfrasExceptions;
 using XTAInfras.XTestCircle;
 
 #endregion Import statements
@@ -31,11 +33,13 @@ internal class XLogInTests : AXTATestFoundation
     [Category(XTestSet.XUI_STANDARD_MODE)]
     public async Task XUITest_NavigateToXLogInPage_InputCorrectCredentials_VerifySuccessfullyLogInAndBeLandedOnHomePageAsync()
     {
+        (XAccountCredModel, ulong, IChannel) creds = await p_TakeIdleXAccountCredAsync();
+        
         XAccountModel xAccountModel = new()
         {
-            XDisplayName = ps_xAppConfModel.XDisplayName,
-            XUsername = ps_xAppConfModel.XUsername,
-            XPassword = ps_xAppConfModel.XPassword,
+            XDisplayName = creds.Item1.XDisplayName,
+            XUsername = creds.Item1.XUsername,
+            XPassword = creds.Item1.XPassword,
         };
         
         XSignInToXModal xSignInToXModal = new(p_xPage);

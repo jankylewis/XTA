@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace XTACore.XTAUtils;
+namespace XTACore.XCoreUtils;
 
 public static class XSingletonFactory
 {
@@ -26,6 +26,14 @@ public static class XSingletonFactory
         throw new InvalidOperationException($"Type {typeof(XService).FullName} has not been registered in the X Singleton Pool.      ");
     }
     
+    public static XService s_DaVinci<XService>(Func<XService> in_xValueFactory) where XService : class
+    {
+        Lazy<object> lazyInitExec = msr_xSingletonServices.GetOrAdd(
+            typeof(XService), _ => new Lazy<object>(() => in_xValueFactory()!, LazyThreadSafetyMode.ExecutionAndPublication));
+
+        return (XService)lazyInitExec.Value;
+    }
+
     public static XService s_DaVinci<XService>() where XService : new()
     {
         Lazy<object> lazyInitExec = msr_xSingletonServices.GetOrAdd(

@@ -1,11 +1,11 @@
 using XTAClient.XTATests.XTATestFoundation;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience.XHomeExperienceModals;
 using XTADomain.XTAModels.XCoreExperience;
 using XTADomain.XTASharedActions;
-using XTAInfras.XExceptions;
+using XTAInfras.XInfrasExceptions;
 using XTAInfras.XTestCircle;
 
 namespace XTAClient.XTATests.XCoreExperience;

@@ -1,7 +1,3 @@
 
 BaseXURL: "https://x.com/"
-
-XDisplayName: "Janky Lewis"
-XUsername: "_jankylewis_se"
-XEmail: "jankylewis.se@gmail.com"
-XPassword: "twicemassproduction1!"
+XExeMode: "LOCAL"
