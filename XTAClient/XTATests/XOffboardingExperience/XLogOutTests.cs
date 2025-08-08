@@ -2,7 +2,7 @@ using XTAClient.XTATests.XTATestFoundation;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XOffboardingExperience.XOffboardingExperienceModals;
 using XTADomain.XTABusinesses.XOnboardingExperience;
-using XTAPlaywright.XTestCircle;
+using XTAInfras.XTestCircle;
 
 namespace XTAClient.XTATests.XOffboardingExperience;
 

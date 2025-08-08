@@ -1,5 +1,5 @@
 using Microsoft.Playwright;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTAPageObjects.XOffboardingExperience.XOffboardingExperienceModals;
 using XTADomain.XTASharedActions;
 
