@@ -1,4 +1,6 @@
 using RabbitMQ.Client;
+using XTAInfras.XInfrasExceptions;
+using XTAInfras.XInfrasUtils;
 
 namespace XTAInfras.XRabbitMQCircle;
 
@@ -10,13 +12,13 @@ internal class XRabbitMQConnectionFactory : IAsyncDisposable
     
     #endregion Introduce constructors
 
-    private IConnection m_xRabbitMQConn;
+    private IConnection? m_xRabbitMQConn;
     
     #region Introduce RabbitMQ operations
 
     internal async Task<IConnection> GenConnectionAsync(IConnectionFactory? in_xConnFactory = default)
     {
-        IConnectionFactory xConnFacTory = in_xConnFactory ?? new ConnectionFactory { HostName = "localhost" };
+        IConnectionFactory xConnFacTory = in_xConnFactory ?? new ConnectionFactory { HostName = XNetworkingServices.LOCALHOST_ADDRESS };
         return m_xRabbitMQConn = await xConnFacTory.CreateConnectionAsync();
     }
 
@@ -27,7 +29,18 @@ internal class XRabbitMQConnectionFactory : IAsyncDisposable
 
     #region Introduce RabbitMQ disposal
 
-    public async ValueTask DisposeAsync() => await m_xRabbitMQConn.CloseAsync();
+    public async ValueTask DisposeAsync()
+    {
+        if (m_xRabbitMQConn is not null)
+        {
+            await m_xRabbitMQConn.CloseAsync();
+            m_xRabbitMQConn = null;
+            
+            return;
+        }
+
+        throw new XRabbitMQConnectionMetNullException("The XRabbitMQConnection is null, please check that out.     ");
+    }
 
     #endregion Introduce RabbitMQ disposal
 }

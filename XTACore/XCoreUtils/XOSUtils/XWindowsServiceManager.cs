@@ -1,7 +1,7 @@
 using System.ServiceProcess;
 using XTACore.XCoreExceptions;
 
-namespace XTACore.XCoreUtils;
+namespace XTACore.XCoreUtils.XOSUtils;
 
 public class XWindowsServiceManager
 {
@@ -19,6 +19,9 @@ public class XWindowsServiceManager
 
     private async Task m_StartServiceAsync()
     {
+        if (!XSingletonFactory.s_DaVinci<XWindowsUtils>().WhetherRunningAsAdmin())
+            throw new XNotRunningAsAdminException("Please execute X Tests with Admin Privileges applied.        ");
+        
         try
         {
             if (ms_xServiceController.Status is ServiceControllerStatus.Stopped or ServiceControllerStatus.Paused)
@@ -31,8 +34,10 @@ public class XWindowsServiceManager
         catch (Exception a_ex)
         {
             throw new XFailedToStartWindowsServiceException(
-                $"An error occurred while trying to start the service '{ms_xServiceController.ServiceName}'.    ", a_ex);
+                $"An error occurred while trying to start the service '{ms_xServiceController.ServiceName}'.    ", a_ex.InnerException ?? a_ex);
         }
+
+        XSingletonFactory.s_Release<XWindowsUtils>();
     }
 
     public async Task StopServiceAsync()

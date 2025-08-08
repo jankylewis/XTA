@@ -27,12 +27,12 @@ public class XRabbitMQManager
 
     #region Introduce RabbitMQ operations
     
-    public async Task PushAllXAccountCredsAsync(
+    public async Task PubAllXAccountCredsAsync(
         IList<XAccountCredModel> in_xAccountCredModels, IConnectionFactory? in_xConnFactory = default)
     {
         await mr_xRabbitMQConnFactory.GenConnectionAsync(in_xConnFactory);
         
-        await using IChannel xRabbitMQChann = await mr_xRabbitMQConnFactory.GenChannelAsync(in_xConnFactory);
+        IChannel xRabbitMQChann = await mr_xRabbitMQConnFactory.GenChannelAsync(in_xConnFactory);
         
         await xRabbitMQChann.QueueDeclareAsync(m_ACCOUNT_QUEUE, durable: true, exclusive: false, autoDelete: false);
 
@@ -40,31 +40,33 @@ public class XRabbitMQManager
             in_xAccountCredModels: in_xAccountCredModels, in_xChannel: xRabbitMQChann, in_xRoutingKey: m_ACCOUNT_QUEUE);
     }
 
-    public async Task<(XAccountCredModel? out_xAccountModel, ulong out_xDeliveryTag, IChannel out_xRabbitMQChann)> GetIdleXAccountCreds(
+    public async Task<(XAccountCredModel? out_xAccountModel, ulong out_xDeliveryTag, IChannel out_xRabbitMQChann)> GetAnIdleXAccountCredModel(
         IConnectionFactory? in_xConnFactory = default)
     {
         IChannel xRabbitMQChann = await mr_xRabbitMQConnFactory.GenChannelAsync(in_xConnFactory: in_xConnFactory);
-        (XAccountCredModel? xAccountModel, ulong xDeliveryTag) = await mr_xAccountCredFactory.BasicGetAccountCredAsync(in_xChannel: xRabbitMQChann, in_xRoutingKey: m_ACCOUNT_QUEUE);;
+        
+        (XAccountCredModel? xAccountModel, ulong xDeliveryTag) 
+            = await mr_xAccountCredFactory.BasicGetAccountCredAsync(in_xChannel: xRabbitMQChann, in_xRoutingKey: m_ACCOUNT_QUEUE);;
         
         return (out_xAccountModel: xAccountModel, out_xDeliveryTag: xDeliveryTag, out_xRabbitMQChann: xRabbitMQChann);
     }
 
     public async Task AckMessagesAsync(ulong in_deliveryTag, IChannel in_xRabbitMQChann)
-    {
-        await in_xRabbitMQChann.BasicAckAsync(deliveryTag: in_deliveryTag, multiple: false);
-        await in_xRabbitMQChann.CloseAsync();
-    }
+        => await in_xRabbitMQChann.BasicAckAsync(deliveryTag: in_deliveryTag, multiple: false);
 
     public async Task RepublishXAccountToQueueAsync(XAccountCredModel in_xAccountCredModel, IChannel in_xRabbitMQChann)
-    {
-        await using IChannel xRabbitMQChann = await mr_xRabbitMQConnFactory.GenChannelAsync();
-        await mr_xAccountCredFactory.BasicPublishAccountCredAsync(in_xAccountCredModel, in_xRabbitMQChann, m_ACCOUNT_QUEUE);
-    }
+        => await mr_xAccountCredFactory.BasicPublishAccountCredAsync(in_xAccountCredModel, in_xRabbitMQChann, m_ACCOUNT_QUEUE);
 
-    public async Task DeleteAllExistingXRabbitMQMsgsAsync()
+    public async Task PurgeXAccountCredModelQueueAsync()
     {
         await using IChannel xRabbitMQChann = await mr_xRabbitMQConnFactory.GenChannelAsync();
         await xRabbitMQChann.QueuePurgeAsync(m_ACCOUNT_QUEUE);
+    }
+    
+    public async Task DeleteXAccountCredModelQueueAsync()
+    {
+        await using IChannel xRabbitMQChann = await mr_xRabbitMQConnFactory.GenChannelAsync();
+        await xRabbitMQChann.QueueDeleteAsync(m_ACCOUNT_QUEUE);
     }
     
     private async Task m_EstablishRabbitMQConnection(IConnectionFactory? in_xConnFactory = default) 
