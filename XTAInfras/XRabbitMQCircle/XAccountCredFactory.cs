@@ -15,7 +15,7 @@ internal class XAccountCredFactory
 
     #region Introduce XAccountCreds operations
     
-    internal async Task<(XAccountCredModel? out_xAccountModel, ulong out_xDeliveryTag)> BasicGetAccountCredAsync(
+    internal async Task<(XAccountCredModel? out_xAccountModel, ulong out_xDeliveryTag)> BasicGetXAccountCredModelAsync(
         IChannel in_xChannel, string in_xRoutingKey)
     {
         BasicGetResult? results = await in_xChannel.BasicGetAsync(queue: in_xRoutingKey, autoAck: false);
@@ -30,16 +30,16 @@ internal class XAccountCredFactory
         XAccountCredModel? xAccountCredModel = JsonConvert.DeserializeObject<XAccountCredModel>(message);
         
         return (out_xAccountModel: xAccountCredModel, out_xDeliveryTag: results.DeliveryTag);
-    }
+    }   
     
-    internal async Task PopulateXAccountCredsAsync(
+    internal async Task PopulateXAccountCredModelsAsync(
         IList<XAccountCredModel> in_xAccountCredModels, IChannel in_xChannel, string in_xRoutingKey) 
     {
         foreach (XAccountCredModel l_xAccountCredModel in in_xAccountCredModels)
-            await BasicPublishAccountCredAsync(l_xAccountCredModel, in_xChannel, in_xRoutingKey);
+            await BasicPubXAccountCredModelAsync(l_xAccountCredModel, in_xChannel, in_xRoutingKey);
     }
     
-    internal async Task BasicPublishAccountCredAsync(
+    internal async Task BasicPubXAccountCredModelAsync(
         XAccountCredModel in_xAccountCredModel, IChannel in_xChannel, string in_xRoutingKey)
     {
         string message = JsonConvert.SerializeObject(in_xAccountCredModel);

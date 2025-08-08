@@ -120,7 +120,7 @@ internal class XLogInTests : AXTATestFoundation
 
     private void m_xZeta_AsObservedToNotBeSupported()
     {
-        if (!ps_xPlaywrightConfModel.Headed)
+        if (!ps_xPlwConfModel.Headed)
             throw new XTestNotSupportedUponHeadlessModeException(
                 $"Test {p_xTestMetaKey} cannot be executed upon headless mode.       ");
     }

@@ -49,7 +49,7 @@ internal abstract partial class AXTATestFoundation
     protected string p_xTestMetaKey => TestContext.CurrentContext.Test.MethodName!;
     
     protected static XAppConfModel ps_xAppConfModel;
-    protected static XPlwConfModel ps_xPlaywrightConfModel;
+    protected static XPlwConfModel ps_xPlwConfModel;
     protected static XAppAccountCredConfModel ps_xAppAccountCredConfModel;
     
     protected IPage p_xPage => m_TakeCurrentXPage();
@@ -74,7 +74,7 @@ internal abstract partial class AXTATestFoundation
     [OneTimeSetUp]
     public static async Task s_XAlphaSetUpAsync()
         => await ms_xRabbitMQManager
-            .PubAllXAccountCredsAsync(ps_xAppAccountCredConfModel.XTestAccounts, new ConnectionFactory
+            .PubAllXAccountCredModelsAsync(ps_xAppAccountCredConfModel.XTestAccounts, new ConnectionFactory
             {
                 HostName = ps_xAppConfModel.XExeMode is EXExeMode.LOCAL
                     ? XNetworkingServices.LOOPBACK_ADDRESS
@@ -129,10 +129,10 @@ internal abstract partial class AXTATestFoundation
 
     #region Introduce private NUnit SetUp services 
 
-        private static void ms_ResolveXConfModels()
+    private static void ms_ResolveXConfModels()
     {
         ps_xAppAccountCredConfModel = XAppAccountCredConfFactory.s_LoadXAppAccountCredConfModel();
-        ps_xPlaywrightConfModel = XPlwConfFactory.s_LoadPlwConfModel();
+        ps_xPlwConfModel = XPlwConfFactory.s_LoadPlwConfModel();
         ps_xAppConfModel = XAppConfFactory.s_LoadXAppConfModel();
     }
 
@@ -140,7 +140,7 @@ internal abstract partial class AXTATestFoundation
     {
         XSingletonFactory.s_Register<XNetworkingServices>();
         ms_xRabbitMQManager = XSingletonFactory.s_DaVinci<XRabbitMQManager>();
-        ms_xPlwEngineer = XSingletonFactory.s_DaVinci(() => new XPlwEngineer(ps_xPlaywrightConfModel));
+        ms_xPlwEngineer = XSingletonFactory.s_DaVinci(() => new XPlwEngineer(ps_xPlwConfModel));
     }
 
     private static async Task ms_PowerUpXPlwPowerSourceAsync()
@@ -170,7 +170,7 @@ internal abstract partial class AXTATestFoundation
         IXTestAdapter xTestAdapter = new XTestAdapter()
             .ProduceXTestAdapter(
                 p_xTestMetaKey ?? throw new XTestMethodKeyGotEmptyException("Test Method Key might got empty     "),
-                ps_xPlaywrightConfModel.BrowserType
+                ps_xPlwConfModel.BrowserType
             );
 
         XPlwMultiCoreCableModel xPlwMultiCoreCableModel 
@@ -186,13 +186,13 @@ internal abstract partial class AXTATestFoundation
     
     private async Task m_GetAnIdleXAccountCredModelAsync()
     {
-        (XAccountCredModel?, ulong, IChannel) xIdleXAccountCredModelCluster 
+        (XAccountCredModel?, ulong, IChannel) idleXAccountCredModelCluster 
             = await ms_xRabbitMQManager.GetAnIdleXAccountCredModel();
 
-        if (xIdleXAccountCredModelCluster.Item1 is null)
+        if (idleXAccountCredModelCluster.Item1 is null)
             throw new XAccountCredModelNotFoundException("There is no avail X Account Cred Model in the queue.      ");
         
-        psr_checkedOutXAccountCredCluster[p_xTestMetaKey] = xIdleXAccountCredModelCluster;
+        psr_checkedOutXAccountCredCluster[p_xTestMetaKey] = idleXAccountCredModelCluster;
     }
 
     #endregion Introduce private NUnit SetUp services
@@ -205,7 +205,7 @@ internal abstract partial class AXTATestFoundation
                 p_xTestMetaKey, 
                 out (XAccountCredModel out_xAccountCredModel, ulong out_xDeliveryTag, IChannel out_xRabbitMQChann) out_xCheckedOutXAccountCredCluster))
         {
-            await ms_xRabbitMQManager.AckMessagesAsync(
+            await ms_xRabbitMQManager.AckMsgAsync(
                 out_xCheckedOutXAccountCredCluster.out_xDeliveryTag, out_xCheckedOutXAccountCredCluster.out_xRabbitMQChann);
 
             await ms_xRabbitMQManager.RepublishXAccountToQueueAsync(
