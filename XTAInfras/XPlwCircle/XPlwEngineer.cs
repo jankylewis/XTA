@@ -41,7 +41,7 @@ public class XPlwEngineer(XPlwConfModel in_xPlwConfModel)
         return in_xPlwAdapterModel;
     }
     
-    public async Task PowerDownPlwPowerSourceAsync(
+    public async Task PowerDownXPlwPowerSourceAsync(
         XPlwSingleCoreCableModel in_xPlwSingleCoreCableModel, 
         XPlwAdapterModel in_xPlwAdapterModel
         ) 

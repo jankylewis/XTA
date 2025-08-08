@@ -7,6 +7,13 @@ public abstract class XCoreExceptions : Exception
     protected XCoreExceptions(string in_message, Exception in_innerException) : base(in_message) {}
 }
 
+public class XNotRunningAsAdminException : XCoreExceptions
+{
+    public XNotRunningAsAdminException() {}
+    public XNotRunningAsAdminException(string in_message) : base(in_message) {}
+    public XNotRunningAsAdminException(string in_message, Exception in_innerException) : base(in_message) {}
+}
+
 public class XFailedToStartWindowsServiceException : XCoreExceptions
 {
     public XFailedToStartWindowsServiceException() {}

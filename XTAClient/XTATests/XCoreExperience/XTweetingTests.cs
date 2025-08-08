@@ -40,7 +40,7 @@ internal class XTweetingTests : AXTATestFoundation
         await m_xHomePage.ClickOnPostBtnAsync();
         await m_xHomePage.FillPostContentAsync(m_xTweetModel.TweetContent);
         await m_xHomePage.ClickOnPostTweetBtnAsync();
-
+        
         await m_xHomePage.ClickOnProfileNavAsync();
         
         await m_xUserProfilePage.VerifyAnXPostSuccessfullyCreated(m_xTweetModel);

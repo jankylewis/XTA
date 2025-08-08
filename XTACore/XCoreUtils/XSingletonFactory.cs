@@ -42,8 +42,25 @@ public static class XSingletonFactory
         return (XService)lazyInitExec.Value;
     }
 
-    #endregion Introduce global singleton services
+    public static bool s_Release<XService>(bool in_disposeWhetherCreated = true)
+    {
+        if (msr_xSingletonServices.TryRemove(typeof(XService), out Lazy<object>? a_removedLazyXService))
+        {
+            if (in_disposeWhetherCreated && a_removedLazyXService.IsValueCreated &&
+                a_removedLazyXService.Value is IDisposable a_disposableLazyXService)
+            {
+                try { a_disposableLazyXService.Dispose(); }
+                catch {}
+            }
 
+            return true;
+        }
+
+        return false;
+    }
+
+    #endregion Introduce global singleton services
+    
     #region Introduce global service disposal
     
     public static void s_DisposeAll()

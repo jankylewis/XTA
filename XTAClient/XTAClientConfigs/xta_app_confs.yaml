@@ -1,3 +1,4 @@
 
 BaseXURL: "https://x.com/"
 XExeMode: "LOCAL"
+WhetherXRabbitMQServiceStopped: true
