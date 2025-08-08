@@ -18,7 +18,7 @@ internal class XRabbitMQConnectionFactory : IAsyncDisposable
 
     internal async Task<IConnection> GenConnectionAsync(IConnectionFactory? in_xConnFactory = default)
     {
-        IConnectionFactory xConnFacTory = in_xConnFactory ?? new ConnectionFactory { HostName = XNetworkingServices.LOCALHOST_ADDRESS };
+        IConnectionFactory xConnFacTory = in_xConnFactory ?? new ConnectionFactory { HostName = XNetworkingServices.LOOPBACK_ADDRESS };
         return m_xRabbitMQConn = await xConnFacTory.CreateConnectionAsync();
     }
 

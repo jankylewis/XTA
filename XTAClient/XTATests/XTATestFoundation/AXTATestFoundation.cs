@@ -77,7 +77,7 @@ internal abstract partial class AXTATestFoundation
             .PubAllXAccountCredsAsync(ps_xAppAccountCredConfModel.XTestAccounts, new ConnectionFactory
             {
                 HostName = ps_xAppConfModel.XExeMode is EXExeMode.LOCAL
-                    ? XNetworkingServices.LOCALHOST_ADDRESS
+                    ? XNetworkingServices.LOOPBACK_ADDRESS
                     : XSingletonFactory.s_Retrieve<XNetworkingServices>()
                         .ResolveXRabbitMQServerIP(),
 
