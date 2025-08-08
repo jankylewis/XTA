@@ -2,11 +2,11 @@
 <RunSettings>
   <RunConfiguration>
     <!-- Set the maximum number of test workers (threads) -->
-    <MaxCpuCount>1</MaxCpuCount>
+    <MaxCpuCount>2</MaxCpuCount>
   </RunConfiguration>
   <NUnit>
     <!-- This sets the number of parallel test workers for NUnit -->
-    <NumberOfTestWorkers>3</NumberOfTestWorkers>
+    <NumberOfTestWorkers>2</NumberOfTestWorkers>
     <!-- Enable parallelization control -->
     <ParallelScope>Children</ParallelScope>
   </NUnit>

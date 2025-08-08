@@ -1,0 +1,9 @@
+XTestAccounts:
+  - XUsername: "_jankylewis_se"
+    XPassword: "twicemassproduction1!"
+    XDisplayName: "Janky Lewis"
+    XEmail: "jankylewis.se@gmail.com"
+  - XUsername: "jankylewis_se02"
+    XPassword: "twicemassproduction1!"
+    XDisplayName: "Janky Lewis 02"
+    XEmail: "jankylewis.se.02@gmail.com"

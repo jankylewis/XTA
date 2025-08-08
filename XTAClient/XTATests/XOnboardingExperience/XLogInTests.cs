@@ -3,15 +3,15 @@
 
 using Microsoft.Playwright;
 using XTAClient.XTATests.XTATestFoundation;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
-using XTAPlaywright.XExceptions;
-using XTAPlaywright.XTestCircle;
+using XTAInfras.XInfrasExceptions;
+using XTAInfras.XTestCircle;
 
 #endregion Import statements
 
@@ -33,9 +33,9 @@ internal class XLogInTests : AXTATestFoundation
     {
         XAccountModel xAccountModel = new()
         {
-            XDisplayName = ps_xAppConfModel.XDisplayName,
-            XUsername = ps_xAppConfModel.XUsername,
-            XPassword = ps_xAppConfModel.XPassword,
+            XDisplayName = psr_checkedOutXAccountCredCluster[p_xTestMetaKey].out_xAccountCredModel.XDisplayName,
+            XUsername = psr_checkedOutXAccountCredCluster[p_xTestMetaKey].out_xAccountCredModel.XUsername,
+            XPassword = psr_checkedOutXAccountCredCluster[p_xTestMetaKey].out_xAccountCredModel.XPassword
         };
         
         XSignInToXModal xSignInToXModal = new(p_xPage);
@@ -46,7 +46,7 @@ internal class XLogInTests : AXTATestFoundation
         
         await xSignInToXModal.InputUsernameAsync(xAccountModel.XUsername);
         await xSignInToXModal.ClickOnNextBtnAsync();
-
+        
         await xEnterYourPasswordModal.InputPasswordAsync(xAccountModel.XPassword);
         await xEnterYourPasswordModal.ClickOnLogInBtnAsync();
         

@@ -1,12 +1,12 @@
 using XTAClient.XTATests.XTATestFoundation;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTABusinesses.XCoreExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience;
 using XTADomain.XTABusinesses.XCoreExperience.XHomeExperience.XHomeExperienceModals;
 using XTADomain.XTAModels.XCoreExperience;
 using XTADomain.XTASharedActions;
-using XTAPlaywright.XExceptions;
-using XTAPlaywright.XTestCircle;
+using XTAInfras.XInfrasExceptions;
+using XTAInfras.XTestCircle;
 
 namespace XTAClient.XTATests.XCoreExperience;
 
@@ -40,7 +40,7 @@ internal class XTweetingTests : AXTATestFoundation
         await m_xHomePage.ClickOnPostBtnAsync();
         await m_xHomePage.FillPostContentAsync(m_xTweetModel.TweetContent);
         await m_xHomePage.ClickOnPostTweetBtnAsync();
-
+        
         await m_xHomePage.ClickOnProfileNavAsync();
         
         await m_xUserProfilePage.VerifyAnXPostSuccessfullyCreated(m_xTweetModel);

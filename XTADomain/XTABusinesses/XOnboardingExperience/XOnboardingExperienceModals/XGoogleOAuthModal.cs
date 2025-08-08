@@ -1,8 +1,8 @@
 using Microsoft.Playwright;
-using XTACore.XTAUtils;
+using XTACore.XCoreUtils;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
 using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
-using XTAPlaywright.XConstHouse;
+using XTAInfras.XConstHouse;
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 

@@ -5,9 +5,9 @@ public sealed class XTAPlwBootstrapper
 {
     [OneTimeSetUp]
     public static async Task s_XGlobalBootAsync() 
-        => await AXTATestFoundation.s_XAlphaSetUpAsync();
+        => await AXTATestFoundation.s_XGlobalBootAsync();
     
     [OneTimeTearDown]
     public static async Task s_XGlobalShutdownAsync() 
-        => await AXTATestFoundation.s_XAlphaTearDownAsync();
+        => await AXTATestFoundation.s_XGlobalShutdownAsync();
 }
