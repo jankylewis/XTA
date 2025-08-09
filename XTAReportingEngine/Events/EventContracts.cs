@@ -5,8 +5,8 @@ namespace XTAReportingEngine.Events;
 public abstract record XTAEvent
 {
     [JsonPropertyName("eventType")] public string EventType { get; init; } = default!;
-    [JsonPropertyName("runId")] public string RunId { get; init; } = default!;
-    [JsonPropertyName("timestampUtc")] public DateTime TimestampUtc { get; init; }
+    [JsonPropertyName("runID")] public string RunID { get; init; } = default!;
+    [JsonPropertyName("timestampUTC")] public DateTime TimestampUTC { get; init; }
 }
 
 public sealed record RunStartedEvent : XTAEvent
@@ -21,27 +21,27 @@ public sealed record RunCompletedEvent : XTAEvent;
 
 public sealed record CaseStartedEvent : XTAEvent
 {
-    [JsonPropertyName("caseId")] public Guid CaseId { get; init; }
+    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
     [JsonPropertyName("name")] public string Name { get; init; } = default!;
     [JsonPropertyName("className")] public string ClassName { get; init; } = default!;
     [JsonPropertyName("categories")] public string[] Categories { get; init; } = Array.Empty<string>();
-    [JsonPropertyName("correlationId")] public string CorrelationId { get; init; } = default!;
-    [JsonPropertyName("startedUtc")] public DateTime StartedUtc { get; init; }
+    [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
+    [JsonPropertyName("startedUTC")] public DateTime StartedUTC { get; init; }
 }
 
 public sealed record CaseCompletedEvent : XTAEvent
 {
-    [JsonPropertyName("caseId")] public Guid CaseId { get; init; }
-    [JsonPropertyName("correlationId")] public string CorrelationId { get; init; } = default!;
+    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
+    [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("status")] public string Status { get; init; } = default!; // Passed|Failed|Skipped
-    [JsonPropertyName("endedUtc")] public DateTime EndedUtc { get; init; }
+    [JsonPropertyName("endedUTC")] public DateTime EndedUTC { get; init; }
     [JsonPropertyName("durationMs")] public long DurationMs { get; init; }
 }
 
 public sealed record StepLoggedEvent : XTAEvent
 {
-    [JsonPropertyName("caseId")] public Guid CaseId { get; init; }
-    [JsonPropertyName("correlationId")] public string CorrelationId { get; init; } = default!;
+    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
+    [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("order")] public int Order { get; init; }
     [JsonPropertyName("name")] public string Name { get; init; } = default!;
     [JsonPropertyName("message")] public string? Message { get; init; }
@@ -51,8 +51,8 @@ public sealed record StepLoggedEvent : XTAEvent
 
 public sealed record LogWrittenEvent : XTAEvent
 {
-    [JsonPropertyName("caseId")] public Guid CaseId { get; init; }
-    [JsonPropertyName("correlationId")] public string CorrelationId { get; init; } = default!;
+    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
+    [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("level")] public string Level { get; init; } = "Info"; // Info|Warn|Error
     [JsonPropertyName("message")] public string Message { get; init; } = default!;
     [JsonPropertyName("exception")] public string? Exception { get; init; }
@@ -60,8 +60,8 @@ public sealed record LogWrittenEvent : XTAEvent
 
 public sealed record AttachmentAddedEvent : XTAEvent
 {
-    [JsonPropertyName("caseId")] public Guid CaseId { get; init; }
-    [JsonPropertyName("correlationId")] public string CorrelationId { get; init; } = default!;
+    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
+    [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("kind")] public string Kind { get; init; } = default!; // Screenshot|Log|Other
     [JsonPropertyName("relativePath")] public string RelativePath { get; init; } = default!;
     [JsonPropertyName("caption")] public string? Caption { get; init; }

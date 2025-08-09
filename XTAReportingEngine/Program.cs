@@ -101,20 +101,20 @@ internal static class Program
     {
         var run = new
         {
-            runId = root.GetProperty("runId").GetString(),
+            runID = root.GetProperty("runID").GetString(),
             runName = root.TryGetProperty("runName", out var rn) ? rn.GetString() : null,
             machine = root.TryGetProperty("machine", out var mc) ? mc.GetString() : Environment.MachineName,
             branch = root.TryGetProperty("branch", out var br) ? br.GetString() : null,
             commit = root.TryGetProperty("commit", out var cm) ? cm.GetString() : null,
-            startedUtc = root.GetProperty("timestampUtc").GetDateTime(),
-            endedUtc = (DateTime?)null,
+            startedUTC = root.GetProperty("timestampUTC").GetDateTime(),
+            endedUTC = (DateTime?)null,
             totals = new { passed = 0, failed = 0, skipped = 0 }
         };
 
         await WriteJsonAsync(Path.Combine(ReportRoot, "run.json"), run);
         await WriteJsonAsync(Path.Combine(ReportRoot, "index.json"), new
         {
-            runId = run.runId,
+            runID = run.runID,
             totals = run.totals,
             durationMs = 0,
             cases = Array.Empty<object>()
@@ -127,18 +127,18 @@ internal static class Program
         if (!File.Exists(runFile)) return;
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(runFile));
         var runObj = doc.RootElement;
-        var startedUtc = runObj.GetProperty("startedUtc").GetDateTime();
-        var endedUtc = root.GetProperty("timestampUtc").GetDateTime();
+        var startedUtc = runObj.GetProperty("startedUTC").GetDateTime();
+        var endedUtc = root.GetProperty("timestampUTC").GetDateTime();
 
         var updated = new
         {
-            runId = runObj.GetProperty("runId").GetString(),
+            runID = runObj.GetProperty("runID").GetString(),
             runName = runObj.TryGetProperty("runName", out var rn) ? rn.GetString() : null,
             machine = runObj.TryGetProperty("machine", out var mc) ? mc.GetString() : Environment.MachineName,
             branch = runObj.TryGetProperty("branch", out var br) ? br.GetString() : null,
             commit = runObj.TryGetProperty("commit", out var cm) ? cm.GetString() : null,
-            startedUtc,
-            endedUtc,
+            startedUTC = startedUtc,
+            endedUTC = endedUtc,
             totals = runObj.GetProperty("totals").Deserialize<object>()
         };
 
@@ -152,7 +152,7 @@ internal static class Program
             var totals = idx.GetProperty("totals").Deserialize<object>();
             var updatedIdx = new
             {
-                runId = idx.GetProperty("runId").GetString(),
+                runID = idx.GetProperty("runID").GetString(),
                 totals,
                 durationMs = (long)(endedUtc - startedUtc).TotalMilliseconds,
                 cases = idx.GetProperty("cases").Deserialize<object>()
@@ -163,17 +163,17 @@ internal static class Program
 
     private static async Task HandleCaseStartedAsync(JsonElement root)
     {
-        var caseId = root.GetProperty("caseId").GetGuid();
+        var caseId = root.GetProperty("caseID").GetGuid();
         var caseObj = new
         {
-            runId = root.GetProperty("runId").GetString(),
+            runID = root.GetProperty("runID").GetString(),
             caseId,
             name = root.GetProperty("name").GetString(),
             className = root.GetProperty("className").GetString(),
             categories = root.GetProperty("categories").Deserialize<string[]>() ?? Array.Empty<string>(),
-            correlationId = root.GetProperty("correlationId").GetString(),
-            startedUtc = root.GetProperty("startedUtc").GetDateTime(),
-            endedUtc = (DateTime?)null,
+            correlationID = root.GetProperty("correlationID").GetString(),
+            startedUTC = root.GetProperty("startedUTC").GetDateTime(),
+            endedUTC = (DateTime?)null,
             status = (string?)null,
             durationMs = (long?)null
         };
@@ -185,32 +185,33 @@ internal static class Program
 
     private static async Task HandleCaseCompletedAsync(JsonElement root)
     {
-        var caseId = root.GetProperty("caseId").GetGuid();
+        var caseId = root.GetProperty("caseID").GetGuid();
         var caseFile = Path.Combine(ReportRoot, "cases", $"{caseId}.json");
         if (!File.Exists(caseFile)) return;
 
         using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(caseFile));
-        var startedUtc = doc.RootElement.GetProperty("startedUtc").GetDateTime();
-        var endedUtc = root.GetProperty("endedUtc").GetDateTime();
+        var startedUtc = doc.RootElement.GetProperty("startedUTC").GetDateTime();
+        var endedUtc = root.GetProperty("endedUTC").GetDateTime();
         var status = root.GetProperty("status").GetString();
         var durationMs = root.GetProperty("durationMs").GetInt64();
 
         var updated = new
         {
-            runId = doc.RootElement.GetProperty("runId").GetString(),
+            runID = doc.RootElement.GetProperty("runID").GetString(),
             caseId,
             name = doc.RootElement.GetProperty("name").GetString(),
             className = doc.RootElement.GetProperty("className").GetString(),
             categories = doc.RootElement.GetProperty("categories").Deserialize<string[]>() ?? Array.Empty<string>(),
-            correlationId = doc.RootElement.GetProperty("correlationId").GetString(),
-            startedUtc,
-            endedUtc,
+            correlationID = doc.RootElement.GetProperty("correlationID").GetString(),
+            startedUTC = startedUtc,
+            endedUTC = endedUtc,
             status,
             durationMs
         };
 
         await WriteJsonAsync(caseFile, updated);
-        await UpdateTotalsAsync(updated.runId!, caseId.ToString(), updated.name!, updated.className!, updated.categories!, status!, durationMs);
+        await UpdateTotalsAsync(
+            updated.runID!, caseId.ToString(), updated.name!, updated.className!, updated.categories!, status!, durationMs);
     }
 
     private static async Task UpdateTotalsAsync(string runId, string caseId, string name, string className, string[] categories, string status, long durationMs)
@@ -232,13 +233,13 @@ internal static class Program
             }
             var updatedRun = new
             {
-                runId = run.GetProperty("runId").GetString(),
+                runID = run.GetProperty("runID").GetString(),
                 runName = run.TryGetProperty("runName", out var rn) ? rn.GetString() : null,
                 machine = run.TryGetProperty("machine", out var mc) ? mc.GetString() : Environment.MachineName,
                 branch = run.TryGetProperty("branch", out var br) ? br.GetString() : null,
                 commit = run.TryGetProperty("commit", out var cm) ? cm.GetString() : null,
-                startedUtc = run.GetProperty("startedUtc").GetDateTime(),
-                endedUtc = run.TryGetProperty("endedUtc", out var eu) && eu.ValueKind != JsonValueKind.Null ? eu.GetDateTime() : (DateTime?)null,
+                startedUTC = run.GetProperty("startedUTC").GetDateTime(),
+                endedUTC = run.TryGetProperty("endedUTC", out var eu) && eu.ValueKind != JsonValueKind.Null ? eu.GetDateTime() : (DateTime?)null,
                 totals = new { passed, failed, skipped }
             };
             await WriteJsonAsync(runFile, updatedRun);
@@ -263,7 +264,7 @@ internal static class Program
             casesArray.Add(new { caseId, name, status, durationMs, className, categories });
             var updatedIdx = new
             {
-                runId = idx.GetProperty("runId").GetString(),
+                runID = idx.GetProperty("runID").GetString(),
                 totals = new { passed, failed, skipped },
                 durationMs = idx.TryGetProperty("durationMs", out var dm) ? dm.GetInt64() : 0,
                 cases = casesArray
@@ -274,7 +275,7 @@ internal static class Program
 
     private static async Task HandleStepLoggedAsync(JsonElement root)
     {
-        var caseId = root.GetProperty("caseId").GetGuid();
+        var caseId = root.GetProperty("caseID").GetGuid();
         var stepsDir = Path.Combine(ReportRoot, "steps");
         Directory.CreateDirectory(stepsDir);
         var file = Path.Combine(stepsDir, $"{caseId}.jsonl");
@@ -283,7 +284,7 @@ internal static class Program
 
     private static async Task HandleLogWrittenAsync(JsonElement root)
     {
-        var caseId = root.GetProperty("caseId").GetGuid();
+        var caseId = root.GetProperty("caseID").GetGuid();
         var logsDir = Path.Combine(ReportRoot, "logs");
         Directory.CreateDirectory(logsDir);
         var file = Path.Combine(logsDir, $"{caseId}.jsonl");
