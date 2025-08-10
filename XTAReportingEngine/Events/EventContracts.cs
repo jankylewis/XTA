@@ -19,19 +19,17 @@ public sealed record RunStartedEvent : XTAEvent
 
 public sealed record RunCompletedEvent : XTAEvent;
 
-public sealed record CaseStartedEvent : XTAEvent
+public sealed record TestStartedEvent : XTAEvent
 {
-    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
-    [JsonPropertyName("name")] public string Name { get; init; } = default!;
-    [JsonPropertyName("className")] public string ClassName { get; init; } = default!;
-    [JsonPropertyName("categories")] public string[] Categories { get; init; } = Array.Empty<string>();
+    [JsonPropertyName("testMethodName")] public string TestMethodName { get; init; } = default!;
+    [JsonPropertyName("testClassName")] public string TestClassName { get; init; } = default!;
+    [JsonPropertyName("testCategories")] public string[] TestCategories { get; init; } = Array.Empty<string>();
     [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("startedUTC")] public DateTime StartedUTC { get; init; }
 }
 
-public sealed record CaseCompletedEvent : XTAEvent
+public sealed record TestCompletedEvent : XTAEvent
 {
-    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
     [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("status")] public string Status { get; init; } = default!; // Passed|Failed|Skipped
     [JsonPropertyName("endedUTC")] public DateTime EndedUTC { get; init; }
@@ -40,7 +38,6 @@ public sealed record CaseCompletedEvent : XTAEvent
 
 public sealed record StepLoggedEvent : XTAEvent
 {
-    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
     [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("order")] public int Order { get; init; }
     [JsonPropertyName("name")] public string Name { get; init; } = default!;
@@ -51,7 +48,6 @@ public sealed record StepLoggedEvent : XTAEvent
 
 public sealed record LogWrittenEvent : XTAEvent
 {
-    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
     [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("level")] public string Level { get; init; } = "Info"; // Info|Warn|Error
     [JsonPropertyName("message")] public string Message { get; init; } = default!;
@@ -60,7 +56,6 @@ public sealed record LogWrittenEvent : XTAEvent
 
 public sealed record AttachmentAddedEvent : XTAEvent
 {
-    [JsonPropertyName("caseID")] public Guid CaseID { get; init; }
     [JsonPropertyName("correlationID")] public string CorrelationID { get; init; } = default!;
     [JsonPropertyName("kind")] public string Kind { get; init; } = default!; // Screenshot|Log|Other
     [JsonPropertyName("relativePath")] public string RelativePath { get; init; } = default!;
@@ -76,10 +71,10 @@ public sealed record StepAttachment
 
 public static class XTAEventTypes
 {
-    public const string RunStarted = nameof(RunStarted);
-    public const string RunCompleted = nameof(RunCompleted);
-    public const string CaseStarted = nameof(CaseStarted);
-    public const string CaseCompleted = nameof(CaseCompleted);
+    public const string RunSessionStarted = nameof(RunSessionStarted);
+    public const string RunSessionCompleted = nameof(RunSessionCompleted);
+    public const string TestStarted = nameof(TestStarted);
+    public const string TestCompleted = nameof(TestCompleted);
     public const string StepLogged = nameof(StepLogged);
     public const string LogWritten = nameof(LogWritten);
     public const string AttachmentAdded = nameof(AttachmentAdded);

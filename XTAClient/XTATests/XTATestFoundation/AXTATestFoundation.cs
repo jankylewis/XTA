@@ -7,11 +7,13 @@ using XTAInfras.XPlwCircle.XPlwAdapter;
 using XTAInfras.XPlwCircle.XPlwCable.XPlwCableModels;
 using XTAInfras.XTestCircle;
 using System.Collections.Concurrent;
+using NUnit.Framework.Interfaces;
 using RabbitMQ.Client;
 using XTACore.XCoreUtils;
 using XTACore.XCoreUtils.XOSUtils;
 using XTAInfras.XInfrasUtils;
 using XTAInfras.XRabbitMQCircle;
+using XTAInfras.XReporting;
 
 namespace XTAClient.XTATests.XTATestFoundation;
 
@@ -29,8 +31,11 @@ internal abstract partial class AXTATestFoundation
     
     private static XPlwSingleCoreCableModel ms_xPlwSingleCoreCableModel;
     
-    private static readonly ConcurrentDictionary<string, XPlwMultiCoreCableModel> msr_xPlwMultiCoreCableModels = new();
-    private static readonly ConcurrentDictionary<string, IXTestAdapter> msr_xTestAdapters = new();
+    private static readonly ConcurrentDictionary<string, XPlwMultiCoreCableModel> 
+        msr_xPlwMultiCoreCableModels = new();
+    
+    private static readonly ConcurrentDictionary<string, IXTestAdapter> 
+        msr_xTestAdapters = new();
     
     private static XPlwAdapterModel ms_xPlwAdapterModel;
     
@@ -38,16 +43,18 @@ internal abstract partial class AXTATestFoundation
 
     private const string m_RABBIT_MQ_SERVICE_NAME = "RabbitMQ";
 
+    private static readonly ConcurrentDictionary<string, (string correlationID, DateTime startedUTC)> 
+        msr_caseMeta = new();
+
     #endregion Introduce private-scoped vars
-    
+
     #region Introduce protected-scoped vars
+    protected string p_xTestMetaKey => TestContext.CurrentContext.Test.MethodName!;
 
     protected static readonly ConcurrentDictionary<string, (
         XAccountCredModel out_xAccountCredModel, ulong out_xDeliveryTag, IChannel out_xRabbitMQChann
         )> psr_checkedOutXAccountCredCluster = new();
-    
-    protected string p_xTestMetaKey => TestContext.CurrentContext.Test.MethodName!;
-    
+   
     protected static XAppConfModel ps_xAppConfModel;
     protected static XPlwConfModel ps_xPlwConfModel;
     protected static XAppAccountCredConfModel ps_xAppAccountCredConfModel;
@@ -91,6 +98,7 @@ internal abstract partial class AXTATestFoundation
     {
         await m_GetAnIdleXAccountCredModelAsync();
         await m_ResolveXPlwCircleAsync();
+        await m_PublishTestStartedAsync();
     }
 
     #endregion Introduce NUnit SetUp phase
@@ -100,6 +108,7 @@ internal abstract partial class AXTATestFoundation
     [TearDown]
     public async Task XHyperTearDownAsync()
     {
+        await m_PublishTestCompletedAsync();
         await m_TransitXAccountCredModelAsync();
         await m_UnplugMultiCoreCableFromXAdapterAsync();
     }
@@ -182,6 +191,8 @@ internal abstract partial class AXTATestFoundation
 
         ms_xPlwAdapterModel 
             = ms_xPlwEngineer.PlugXMultiCoreCableIntoXAdapter(xTestAdapter, xPlwMultiCoreCableModel, ms_xPlwAdapterModel);
+        // Store correlationID for reporting
+        msr_caseMeta[p_xTestMetaKey] = (xTestAdapter.XTestCorrelationID, DateTime.UtcNow);
     }
     
     private async Task m_GetAnIdleXAccountCredModelAsync()
@@ -211,6 +222,154 @@ internal abstract partial class AXTATestFoundation
             await ms_xRabbitMQManager.RepublishXAccountToQueueAsync(
                 out_xCheckedOutXAccountCredCluster.out_xAccountCredModel, out_xCheckedOutXAccountCredCluster.out_xRabbitMQChann);
         }
+    }
+
+    private async Task m_PublishTestStartedAsync()
+    {
+        if (!msr_caseMeta.TryGetValue(p_xTestMetaKey, out var meta)) 
+            return;
+        
+        if (XTAPlwBootstrapper.s_Publisher is null) 
+            return;
+        
+        var ch = XTAPlwBootstrapper.s_Publisher
+            .GetType()
+            .GetField("m_channel", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?
+            .GetValue(XTAPlwBootstrapper.s_Publisher) as IChannel;
+
+        if (ch is null) 
+            return;
+        
+        await XTAReportTestEvents.PublishTestStartedAsync(
+            channel: ch,
+            runSessionID: XTAPlwBootstrapper.RunSessionID,
+            testMethodName: p_xTestMetaKey,
+            testClassName: TestContext.CurrentContext.Test.ClassName!,
+            testCategories: TestContext.CurrentContext.Test.Properties["Category"]?.Cast<string>().ToArray() ?? Array.Empty<string>(),
+            correlationID: meta.correlationID,
+            startedUTC: meta.startedUTC,
+            ct: default
+        );
+    }
+
+    private async Task m_PublishTestCompletedAsync()
+    {
+        if (!msr_caseMeta.TryRemove(p_xTestMetaKey, out var meta)) return;
+        if (XTAPlwBootstrapper.s_Publisher is null) return;
+        var status = TestContext.CurrentContext.Result.Outcome.Status switch
+        {
+            TestStatus.Passed => "Passed",
+            TestStatus.Skipped => "Skipped",
+            _ => "Failed"
+        };
+        var durationMs = (long)(DateTime.UtcNow - meta.startedUTC).TotalMilliseconds;
+        var ch = XTAPlwBootstrapper.s_Publisher
+            .GetType()
+            .GetField("m_channel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?
+            .GetValue(XTAPlwBootstrapper.s_Publisher) as IChannel;
+        if (ch is null) return;
+
+        if (status == "Failed")
+        {
+            try
+            {
+                string reportRoot = Environment.GetEnvironmentVariable("XTA_REPORT_ROOT")
+                    ?? Path.Combine(AppContext.BaseDirectory, "report");
+                string attachDir = Path.Combine(reportRoot, "attachments", meta.correlationID);
+                Directory.CreateDirectory(attachDir);
+                string fileName = $"{DateTime.UtcNow:yyyyMMdd_HHmmssfff}_failure.png";
+                string fullPath = Path.Combine(attachDir, fileName);
+                await p_xPage.ScreenshotAsync(new PageScreenshotOptions { Path = fullPath, FullPage = true });
+                string relativePath = Path.Combine("attachments", meta.correlationID, fileName);
+                await XTAReportTestEvents.PublishStepLoggedAsync(
+                    ch,
+                    XTAPlwBootstrapper.RunSessionID,
+                    meta.correlationID,
+                    order: 0,
+                    name: "Failure Screenshot",
+                    message: TestContext.CurrentContext.Result.Message,
+                    status: "Failed",
+                    attachmentRelativePath: relativePath,
+                    attachmentCaption: "Failure screenshot"
+                );
+            }
+            catch { }
+        }
+        await XTAReportTestEvents.PublishTestCompletedAsync(
+            ch,
+            XTAPlwBootstrapper.RunSessionID,
+            meta.correlationID,
+            status,
+            DateTime.UtcNow,
+            durationMs
+        );
+    }
+
+    protected async Task p_LogStepAsync(
+        string stepSummary, 
+        string? stepMessage = null, 
+        bool withScreenshot = false, 
+        string status = "Info")
+    {
+        if (!msr_caseMeta.TryGetValue(p_xTestMetaKey, out var meta)) return;
+        if (XTAPlwBootstrapper.s_Publisher is null) return;
+        var ch = XTAPlwBootstrapper.s_Publisher
+            .GetType()
+            .GetField("m_channel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?
+            .GetValue(XTAPlwBootstrapper.s_Publisher) as IChannel;
+        if (ch is null) return;
+
+        string? relativePath = null;
+        string? caption = null;
+
+        if (withScreenshot)
+        {
+            string reportRoot = Environment.GetEnvironmentVariable("XTA_REPORT_ROOT")
+                ?? Path.Combine(AppContext.BaseDirectory, "report");
+            string attachDir = Path.Combine(reportRoot, "attachments", meta.correlationID);
+            Directory.CreateDirectory(attachDir);
+            string fileName = $"{DateTime.UtcNow:yyyyMMdd_HHmmssfff}_{stepSummary}.png";
+            string fullPath = Path.Combine(attachDir, fileName);
+            await p_xPage.ScreenshotAsync(new PageScreenshotOptions { Path = fullPath, FullPage = true });
+            relativePath = Path.Combine("attachments", meta.correlationID, fileName);
+            caption = stepSummary;
+        }
+
+        await XTAReportTestEvents.PublishStepLoggedAsync(
+            ch,
+            XTAPlwBootstrapper.RunSessionID,
+            meta.correlationID,
+            order: 0,
+            stepSummary,
+            stepMessage,
+            status,
+            attachmentRelativePath: relativePath,
+            attachmentCaption: caption
+        );
+    }
+
+    protected async Task p_LogInfoAsync(string message) => await m_LogAsync("Info", message, null);
+    protected async Task p_LogErrorAsync(string message, Exception? ex = null) => await m_LogAsync("Error", message, ex);
+
+    private async Task m_LogAsync(string logLevel, string message, Exception? ex)
+    {
+        if (!msr_caseMeta.TryGetValue(p_xTestMetaKey, out var meta)) return;
+        if (XTAPlwBootstrapper.s_Publisher is null) return;
+        var ch = XTAPlwBootstrapper.s_Publisher
+            .GetType()
+            .GetField("m_channel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?
+            .GetValue(XTAPlwBootstrapper.s_Publisher) as IChannel;
+        if (ch is null) return;
+
+        await XTAReportTestEvents.PublishLogWrittenAsync(
+            ch,
+            XTAPlwBootstrapper.RunSessionID,
+            meta.correlationID,
+            logLevel,
+            message,
+            ex?.ToString()
+        );
     }
 
     private async Task m_UnplugMultiCoreCableFromXAdapterAsync()
