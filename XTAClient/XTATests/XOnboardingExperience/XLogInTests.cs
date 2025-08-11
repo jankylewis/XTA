@@ -10,6 +10,7 @@ using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
+using XTAInfras.XInfrasConstHouse;
 using XTAInfras.XInfrasExceptions;
 using XTAInfras.XTestCircle;
 
@@ -61,7 +62,10 @@ internal class XLogInTests : AXTATestFoundation
     [Category(XTestSet.XUI_STANDARD_MODE)]
     public async Task XUITest_NavigateToXLogInPage_ClickOnSignInButton_VerifySignInToXModalDisplayedAsync()
     {
+        await p_LogStepAsync(XKnownStepSummaryConsts.CLICKING, "Click on Sign-in Button");
         await new XLogInPage(p_xPage).ClickOnSignInBtnAsync();
+
+        await p_LogStepAsync(XKnownStepSummaryConsts.VERIFYING, "Verify whether Sign-in-to-X Modal is presented");
         await new XSignInToXModal(p_xPage).VerifyIfSignInToXModalDisplayedAsync();
     }
     
@@ -135,8 +139,12 @@ internal class XLogInTests : AXTATestFoundation
 
     [SetUp]
     public async Task XMegaSetUpAsync()
-        => await XSingletonFactory.s_Retrieve<XTANavigationKit>()
+    {
+        await p_LogStepAsync(XKnownStepSummaryConsts.NAVIGATING, "Navigate to Base X URL");
+
+        await XSingletonFactory.s_Retrieve<XTANavigationKit>()
             .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
+    }
     
     #endregion Introduce NUnit SetUp phase
 }

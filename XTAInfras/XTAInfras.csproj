@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\XTACore\XTACore.csproj" />
+      <ProjectReference Include="..\XTAReportingEngine\XTAReportingEngine.csproj" />
     </ItemGroup>
 
     <ItemGroup>

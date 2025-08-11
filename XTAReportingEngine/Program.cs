@@ -17,12 +17,13 @@ internal static class Program
     private static string ReportRoot
         => Environment.GetEnvironmentVariable("XTA_REPORT_ROOT") is { Length: > 0 } custom
             ? custom
-            : Path.Combine(AppContext.BaseDirectory, "report");
+            : XReportingConsts.XTA_REPORTING_DIR;
 
     public static async Task Main(string[] args)
     {
         Console.WriteLine("XTA Reporting Engine starting...");
         Directory.CreateDirectory(ReportRoot);
+        Console.WriteLine("Engine running. Press Ctrl+C to stop.");
 
         var factory = new ConnectionFactory
         {
@@ -33,12 +34,12 @@ internal static class Program
         await using var connection = await factory.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        const string exchange = "xta.test.events";
+        const string exchange = "xta.test.events.topic";
         const string queue = "xta.report.events";
 
-        await channel.ExchangeDeclareAsync(exchange, ExchangeType.Direct, durable: true);
+        await channel.ExchangeDeclareAsync(exchange, ExchangeType.Topic, durable: true);
         await channel.QueueDeclareAsync(queue, durable: true, exclusive: false, autoDelete: false);
-        await channel.QueueBindAsync(queue, exchange, routingKey: "#");
+        await channel.QueueBindAsync(queue, exchange, routingKey: "run.#");
         await channel.BasicQosAsync(0, 50, false);
 
         var consumer = new AsyncEventingBasicConsumer(channel);
@@ -87,17 +88,55 @@ internal static class Program
             }
         };
 
-        // Start consuming and keep the process alive. The consumer uses an event-driven callback; no explicit loop is needed.
+        // Start consuming and keep the process alive.
         var consumerTag = await channel.BasicConsumeAsync(queue, autoAck: false, consumer);
+
+        using var shutdownCts = new CancellationTokenSource();
+        var isShuttingDown = false;
 
         Console.CancelKeyPress += async (_, e) =>
         {
             e.Cancel = true;
+            if (isShuttingDown) return;
+            isShuttingDown = true;
             Console.WriteLine("Shutting down...");
-            await channel.BasicCancelAsync(consumerTag);
+            try { await channel.BasicCancelAsync(consumerTag); } catch { }
+            shutdownCts.Cancel();
         };
 
-        await Task.Delay(Timeout.InfiniteTimeSpan);
+        try
+        {
+            await Task.Delay(Timeout.InfiniteTimeSpan, shutdownCts.Token);
+        }
+
+        // Wait until Ctrl+C, then optionally clean up broker resources
+        try
+        {
+            // already waited above; just a placeholder for symmetry
+        }
+        catch (OperationCanceledException a_operationCancelledEx)
+        {
+            // graceful exit
+        }
+        finally
+        {
+            try
+            {
+                // Explicit cleanup of queue; safe no-op if it was auto-deleted or missing
+                await channel.QueueDeleteAsync(queue);
+
+                // Optionally delete the exchange if explicitly requested
+                var deleteExchange = (Environment.GetEnvironmentVariable("XTA_RMQ_DELETE_EXCHANGE") ?? "false").ToLowerInvariant();
+                if (deleteExchange is "1" or "true" or "yes")
+                {
+                    await channel.ExchangeDeleteAsync(exchange);
+                }
+            }
+            catch
+            {
+                // best-effort cleanup
+            }
+        }
     }
 
     private static async Task HandleRunStartedAsync(JsonElement root)

@@ -274,6 +274,18 @@ internal abstract partial class AXTATestFoundation
         {
             try
             {
+                // Emit an error log entry automatically
+                var errorMsg = TestContext.CurrentContext.Result.Message ?? "Test failed";
+                var stack = TestContext.CurrentContext.Result.StackTrace;
+                await XTAReportTestEvents.PublishLogWrittenAsync(
+                    ch,
+                    XTAPlwBootstrapper.RunSessionID,
+                    meta.correlationID,
+                    level: "Error",
+                    message: stack is null ? errorMsg : $"{errorMsg}\n{stack}",
+                    exception: null
+                );
+
                 string reportRoot = Environment.GetEnvironmentVariable("XTA_REPORT_ROOT")
                     ?? Path.Combine(AppContext.BaseDirectory, "report");
                 string attachDir = Path.Combine(reportRoot, "attachments", meta.correlationID);

@@ -2,12 +2,13 @@ using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
 using XTAInfras.XInfrasUtils;
+using XTAReportingEngine.Events;
 
 namespace XTAInfras.XReporting;
 
 public sealed class XTAReportEventPublisher : IAsyncDisposable
 {
-    private const string m_EXCHANGE = "xta.test.events";
+    private const string m_EXCHANGE = "xta.test.events.topic";
     private readonly ConnectionFactory mr_connFactory;
     private IConnection? m_connection;
     private IChannel? m_channel;
@@ -30,32 +31,31 @@ public sealed class XTAReportEventPublisher : IAsyncDisposable
         await m_EnsureConnectedAsync(ct);
         
         var runMode = Environment.GetEnvironmentVariable("XTA_RUN_MODE") ?? "Local Run";
-        var payload = new
-        {
-            eventType = "RunSessionStarted",
-            runSessionID,
-            timestampUTC = DateTime.UtcNow,
-            runMode,
-            machine = Environment.MachineName,
-            branch,
-            commit
-        };
         
-        await m_PublishAsync(payload, routingKey: $"run.{runSessionID}", ct);
+        var evt = new RunSessionStartedEvent
+        {
+            EventType = XTAEventTypes.RunSessionStarted,
+            RunSessionID = runSessionID,
+            TimestampUTC = DateTime.UtcNow,
+            RunMode = runMode,
+            Machine = Environment.MachineName,
+            Branch = branch,
+            Commit = commit
+        };
+        await m_PublishAsync(evt, routingKey: $"run.{runSessionID}", ct);
     }
 
     public async Task PublishRunSessionCompletedAsync(string runSessionID, CancellationToken ct = default)
     {
         await m_EnsureConnectedAsync(ct);
         
-        var payload = new
+        var evt = new RunSessionCompletedEvent
         {
-            eventType = "RunSessionCompleted",
-            runSessionID,
-            timestampUTC = DateTime.UtcNow
+            EventType = XTAEventTypes.RunSessionCompleted,
+            RunSessionID = runSessionID,
+            TimestampUTC = DateTime.UtcNow
         };
-
-        await m_PublishAsync(payload, routingKey: $"run.{runSessionID}", ct);
+        await m_PublishAsync(evt, routingKey: $"run.{runSessionID}", ct);
     }
 
     private async Task m_EnsureConnectedAsync(CancellationToken ct)
@@ -67,7 +67,7 @@ public sealed class XTAReportEventPublisher : IAsyncDisposable
         
         m_channel = await m_connection.CreateChannelAsync(cancellationToken: ct);
         
-        await m_channel.ExchangeDeclareAsync(m_EXCHANGE, ExchangeType.Direct, durable: true, cancellationToken: ct);
+        await m_channel.ExchangeDeclareAsync(m_EXCHANGE, ExchangeType.Topic, durable: true, cancellationToken: ct);
     }
 
     private async Task m_PublishAsync(object payload, string routingKey, CancellationToken ct)

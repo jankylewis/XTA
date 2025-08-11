@@ -1,12 +1,13 @@
 using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
+using XTAReportingEngine.Events;
 
 namespace XTAInfras.XReporting;
 
 public static class XTAReportTestEvents
 {
-    private const string m_EXCHANGE = "xta.test.events";
+    private const string m_EXCHANGE = "xta.test.events.topic";
 
     public static async Task PublishTestStartedAsync(
         IChannel channel,
@@ -19,23 +20,23 @@ public static class XTAReportTestEvents
         CancellationToken ct = default
         )
     {
-        await channel.ExchangeDeclareAsync(m_EXCHANGE, ExchangeType.Direct, durable: true, cancellationToken: ct);
+        // await channel.ExchangeDeclareAsync(m_EXCHANGE, ExchangeType.Topic, durable: true, cancellationToken: ct);
         
-        var payload = new
+        var evt = new TestStartedEvent
         {
-            eventType = "TestStarted",
-            runSessionID,
-            timestampUTC = DateTime.UtcNow,
-            testMethodName,
-            testClassName,
-            testCategories,
-            correlationID,
-            startedUTC
+            EventType = XTAEventTypes.TestStarted,
+            RunSessionID = runSessionID,
+            TimestampUTC = DateTime.UtcNow,
+            TestMethodName = testMethodName,
+            TestClassName = testClassName,
+            TestCategories = testCategories,
+            CorrelationID = correlationID,
+            StartedUTC = startedUTC
         };
 
         await m_PublishAsync(
             channel, 
-            payload, 
+            evt, 
             routingKey: $"run.{runSessionID}", 
             ct
             );
@@ -51,18 +52,18 @@ public static class XTAReportTestEvents
         CancellationToken ct = default
         )
     {
-        var payload = new
+        var evtC = new TestCompletedEvent
         {
-            eventType = "TestCompleted",
-            runSessionID,
-            timestampUTC = DateTime.UtcNow,
-            correlationID,
-            status,
-            endedUTC,
-            durationMs
+            EventType = XTAEventTypes.TestCompleted,
+            RunSessionID = runSessionID,
+            TimestampUTC = DateTime.UtcNow,
+            CorrelationID = correlationID,
+            Status = status,
+            EndedUTC = endedUTC,
+            DurationMs = durationMs
         };
 
-        await m_PublishAsync(channel, payload, $"run.{runSessionID}", ct);
+        await m_PublishAsync(channel, evtC, $"run.{runSessionID}", ct);
     }
 
     public static async Task PublishStepLoggedAsync(
@@ -77,20 +78,20 @@ public static class XTAReportTestEvents
         string? attachmentCaption = null, 
         CancellationToken ct = default)
     {
-        var payload = new
+        var evtS = new StepLoggedEvent
         {
-            eventType = "StepLogged",
-            runID,
-            timestampUTC = DateTime.UtcNow,
-            correlationID,
-            order,
-            name,
-            message,
-            status,
-            attachment = attachmentRelativePath is null ? null : new { kind = "Screenshot", relativePath = attachmentRelativePath, caption = attachmentCaption }
+            EventType = XTAEventTypes.StepLogged,
+            RunSessionID = runID,
+            TimestampUTC = DateTime.UtcNow,
+            CorrelationID = correlationID,
+            Order = order,
+            Name = name,
+            Message = message,
+            Status = status,
+            Attachment = attachmentRelativePath is null ? null : new StepAttachment { Kind = "Screenshot", RelativePath = attachmentRelativePath, Caption = attachmentCaption }
         };
 
-        await m_PublishAsync(channel, payload, $"run.{runID}", ct);
+        await m_PublishAsync(channel, evtS, $"run.{runID}", ct);
     }
 
     public static async Task PublishLogWrittenAsync(
@@ -102,18 +103,18 @@ public static class XTAReportTestEvents
         string? exception = null, 
         CancellationToken ct = default)
     {
-        var payload = new
+        var evtL = new LogWrittenEvent
         {
-            eventType = "LogWritten",
-            runSessionID,
-            timestampUTC = DateTime.UtcNow,
-            correlationID,
-            level,
-            message,
-            exception
+            EventType = XTAEventTypes.LogWritten,
+            RunSessionID = runSessionID,
+            TimestampUTC = DateTime.UtcNow,
+            CorrelationID = correlationID,
+            Level = level,
+            Message = message,
+            Exception = exception
         };
         
-        await m_PublishAsync(channel, payload, $"run.{runSessionID}", ct);
+        await m_PublishAsync(channel, evtL, $"run.{runSessionID}", ct);
     }
 
     private static async Task m_PublishAsync(IChannel channel, object payload, string routingKey, CancellationToken ct)

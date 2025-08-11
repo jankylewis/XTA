@@ -1,4 +1,4 @@
-namespace XTAInfras.XConstHouse;
+namespace XTAInfras.XInfrasConstHouse;
 
 public class XTimedoutConsts
 {

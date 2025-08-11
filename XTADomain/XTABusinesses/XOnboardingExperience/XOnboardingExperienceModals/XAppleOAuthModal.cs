@@ -2,7 +2,7 @@ using Microsoft.Playwright;
 using XTACore.XCoreUtils;
 using XTADomain.XTABusinesses.XBusinessAbstractions;
 using XTADomain.XTAPageObjects.XOnboardingExperience.XOnboardingExperienceModals;
-using XTAInfras.XConstHouse;
+using XTAInfras.XInfrasConstHouse;
 
 namespace XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 

@@ -5,19 +5,19 @@ namespace XTAReportingEngine.Events;
 public abstract record XTAEvent
 {
     [JsonPropertyName("eventType")] public string EventType { get; init; } = default!;
-    [JsonPropertyName("runID")] public string RunID { get; init; } = default!;
+    [JsonPropertyName("runSessionID")] public string RunSessionID { get; init; } = default!;
     [JsonPropertyName("timestampUTC")] public DateTime TimestampUTC { get; init; }
 }
 
-public sealed record RunStartedEvent : XTAEvent
+public sealed record RunSessionStartedEvent : XTAEvent
 {
-    [JsonPropertyName("runName")] public string? RunName { get; init; }
+    [JsonPropertyName("runMode")] public string? RunMode { get; init; }
     [JsonPropertyName("machine")] public string Machine { get; init; } = Environment.MachineName;
     [JsonPropertyName("branch")] public string? Branch { get; init; }
     [JsonPropertyName("commit")] public string? Commit { get; init; }
 }
 
-public sealed record RunCompletedEvent : XTAEvent;
+public sealed record RunSessionCompletedEvent : XTAEvent;
 
 public sealed record TestStartedEvent : XTAEvent
 {
