@@ -5,4 +5,3 @@ Test Automation-related Tech Stacks:
 - Playwright with .NET
 - NUnit
 - RabbitMQ
-- Redis
