@@ -108,34 +108,20 @@ internal static class Program
         {
             await Task.Delay(Timeout.InfiniteTimeSpan, shutdownCts.Token);
         }
-
-        // Wait until Ctrl+C, then optionally clean up broker resources
-        try
-        {
-            // already waited above; just a placeholder for symmetry
-        }
-        catch (OperationCanceledException a_operationCancelledEx)
-        {
-            // graceful exit
-        }
+        
+        // Gracefully exited
+        catch (OperationCanceledException) {}
+        
         finally
         {
             try
             {
-                // Explicit cleanup of queue; safe no-op if it was auto-deleted or missing
                 await channel.QueueDeleteAsync(queue);
-
-                // Optionally delete the exchange if explicitly requested
                 var deleteExchange = (Environment.GetEnvironmentVariable("XTA_RMQ_DELETE_EXCHANGE") ?? "false").ToLowerInvariant();
                 if (deleteExchange is "1" or "true" or "yes")
-                {
                     await channel.ExchangeDeleteAsync(exchange);
-                }
             }
-            catch
-            {
-                // best-effort cleanup
-            }
+            catch {}
         }
     }
 
