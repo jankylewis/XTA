@@ -34,4 +34,7 @@ public class XRandomUtils
         
         return new string(buffer);
     }
+    
+    public int GenRandomInt(int in_min, int in_max)
+        => RandomNumberGenerator.GetInt32(in_min, in_max + 1);
 }

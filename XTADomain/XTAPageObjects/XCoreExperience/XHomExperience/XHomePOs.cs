@@ -18,5 +18,11 @@ public class XHomePOs : AXPOs
     
     internal String BTN_DELETE_TWEET
         => pr_xPOSharedUtils.BuildSelector("//div[span[text()='Delete']]", ELocatingMechanism.XPATH);
+
+    internal String BTN_UNLIKE_TWEET
+        => pr_xPOSharedUtils.BuildSelector("button[data-testid='unlike']", ELocatingMechanism.CSS);
+    
+    internal String BTN_LIKE_OR_UNLIKE_TWEET
+        => pr_xPOSharedUtils.BuildSelector("//button[@data-testid='like' or @data-testid='unlike']", ELocatingMechanism.XPATH);
 }
 
