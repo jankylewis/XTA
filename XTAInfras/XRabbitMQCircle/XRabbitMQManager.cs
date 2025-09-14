@@ -26,6 +26,12 @@ public class XRabbitMQManager
     #endregion Introduce class vars
 
     #region Introduce RabbitMQ operations
+
+    // CI Implementation
+    public string ResolveXRabbitMQServerIP() => "";
+    
+    // CI Implementation
+    public int ResolveXRabbitMQServerPort() => -1;
     
     public async Task PubAllXAccountCredModelsAsync(
         IList<XAccountCredModel> in_xAccountCredModels, IConnectionFactory? in_xConnFactory = default)

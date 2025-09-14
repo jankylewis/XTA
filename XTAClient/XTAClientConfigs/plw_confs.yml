@@ -1,6 +1,6 @@
 
 BrowserType: "chrome"
-Headed: false
+Headed: true
 SlowMo: 0
 Timeout: 47000
 

@@ -2,7 +2,8 @@ namespace XTAInfras.XConfFactories.XConfModels;
 
 public enum EXExeMode
 {
-    LOCAL,
+    COMPLETE_LOCAL,
+    PARTIAL_LOCAL,
     CI
 }
 

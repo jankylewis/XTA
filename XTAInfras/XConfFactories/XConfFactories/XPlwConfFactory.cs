@@ -6,7 +6,7 @@ namespace XTAInfras.XConfFactories.XConfFactories;
 
 public static class XPlwConfFactory
 {
-    private const String m_PLAYWRIGHT_CONF_PATH = "XTAClientConfigs/plw_confs.yaml";
+    private const String m_PLAYWRIGHT_CONF_PATH = "XTAClientConfigs/plw_confs.yml";
 
     public static XPlwConfModel s_LoadPlwConfModel(string in_playwrightConfPath = m_PLAYWRIGHT_CONF_PATH)
     {

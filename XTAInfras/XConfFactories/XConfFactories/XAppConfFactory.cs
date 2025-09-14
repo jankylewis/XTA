@@ -6,7 +6,7 @@ namespace XTAInfras.XConfFactories.XConfFactories;
 
 public static class XAppConfFactory
 {
-    private const String m_X_CONFS_PATH = "XTAClientConfigs/xta_app_confs.yaml";
+    private const String m_X_CONFS_PATH = "XTAClientConfigs/xta_app_confs.yml";
 
     public static XAppConfModel s_LoadXAppConfModel(string in_xAppConfPath = m_X_CONFS_PATH)
     {

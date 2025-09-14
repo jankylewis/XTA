@@ -6,7 +6,7 @@ namespace XTAInfras.XConfFactories.XConfFactories;
 
 public static class XAppAccountCredConfFactory
 {
-    private const String m_X_CONFS_PATH = "XTAClientConfigs/xta_account_cred_confs.yaml";
+    private const String m_X_CONFS_PATH = "XTAClientConfigs/xta_account_cred_confs.yml";
 
     public static XAppAccountCredConfModel s_LoadXAppAccountCredConfModel(string in_xAppConfPath = m_X_CONFS_PATH)
     {

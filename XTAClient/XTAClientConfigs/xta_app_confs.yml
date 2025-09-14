@@ -1,0 +1,4 @@
+
+BaseXURL: "https://x.com/"
+XExeMode: "PARTIAL_LOCAL"                     # COMPLETE_LOCAL, PARTIAL_LOCAL, CI
+WhetherXRabbitMQServiceStopped: true          
