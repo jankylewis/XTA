@@ -14,10 +14,4 @@ public class XNetworkingServices
     public const string LOOPBACK_ADDRESS = "127.0.0.1";
     
     #endregion Introduce X Networking vars
-    
-    #region Introduce X Networking operations
-
-    public string ResolveXRabbitMQServerIP() => "";
-
-    #endregion Introduce X Networking operations
 }

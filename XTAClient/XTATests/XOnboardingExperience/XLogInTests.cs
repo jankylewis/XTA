@@ -10,6 +10,7 @@ using XTADomain.XTABusinesses.XOnboardingExperience;
 using XTADomain.XTABusinesses.XOnboardingExperience.XOnboardingExperienceModals;
 using XTADomain.XTAModels;
 using XTADomain.XTASharedActions;
+using XTAInfras.XConstHouse;
 using XTAInfras.XInfrasExceptions;
 using XTAInfras.XTestCircle;
 
@@ -136,7 +137,12 @@ internal class XLogInTests : AXTATestFoundation
     [SetUp]
     public async Task XMegaSetUpAsync()
         => await XSingletonFactory.s_Retrieve<XTANavigationKit>()
-            .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL);
+            .NavigateToURLAsync(p_xPage, ps_xAppConfModel.BaseXURL,
+                new PageGotoOptions
+                { 
+                    WaitUntil = WaitUntilState.Load,
+                    Timeout = XTimedoutConsts.NAVIGATION_TIMEOUT_MS * 2
+                });
     
     #endregion Introduce NUnit SetUp phase
 }

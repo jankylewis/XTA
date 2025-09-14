@@ -70,21 +70,9 @@ internal abstract partial class AXTATestFoundation
         await ms_PowerUpXRabbitMQServerAsync();
         await ms_PowerUpXPlwPowerSourceAsync();
     }
-
+    
     [OneTimeSetUp]
-    public static async Task s_XAlphaSetUpAsync()
-        => await ms_xRabbitMQManager
-            .PubAllXAccountCredModelsAsync(ps_xAppAccountCredConfModel.XTestAccounts, new ConnectionFactory
-            {
-                HostName = ps_xAppConfModel.XExeMode is EXExeMode.LOCAL
-                    ? XNetworkingServices.LOOPBACK_ADDRESS
-                    : XSingletonFactory.s_Retrieve<XNetworkingServices>()
-                        .ResolveXRabbitMQServerIP(),
-
-                RequestedHeartbeat = TimeSpan.FromSeconds(200),
-                NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
-                AutomaticRecoveryEnabled = true
-            });
+    public static async Task s_XAlphaSetUpAsync() => await ms_PubAllXAccountCredModelsAsync();
 
     [SetUp]
     public async Task XHyperSetUpAsync()
@@ -143,6 +131,45 @@ internal abstract partial class AXTATestFoundation
         ms_xPlwEngineer = XSingletonFactory.s_DaVinci(() => new XPlwEngineer(ps_xPlwConfModel));
     }
 
+    private static async Task ms_PubAllXAccountCredModelsAsync()
+    {
+        string rmqHostName = (ps_xAppConfModel.XExeMode is EXExeMode.COMPLETE_LOCAL
+                              || ps_xAppConfModel.XExeMode is EXExeMode.PARTIAL_LOCAL)
+            ? XNetworkingServices.LOOPBACK_ADDRESS
+            : ms_xRabbitMQManager.ResolveXRabbitMQServerIP();
+        
+        int rmqAMQPPort = (ps_xAppConfModel.XExeMode is EXExeMode.COMPLETE_LOCAL
+                           || ps_xAppConfModel.XExeMode is EXExeMode.PARTIAL_LOCAL)
+            ? AmqpTcpEndpoint.UseDefaultPort // The default AMQP port is 5672.
+            : ms_xRabbitMQManager.ResolveXRabbitMQServerPort();
+        
+        string rmqUsername = String.Empty;
+        if (ps_xAppConfModel.XExeMode is EXExeMode.COMPLETE_LOCAL)
+            rmqUsername = ConnectionFactory.DefaultUser;
+        else if (ps_xAppConfModel.XExeMode is EXExeMode.PARTIAL_LOCAL)
+            rmqUsername = "xadmin";
+        
+        string rmqPassword = String.Empty;
+        if (ps_xAppConfModel.XExeMode is EXExeMode.COMPLETE_LOCAL)
+            rmqPassword = ConnectionFactory.DefaultPass;
+        else if (ps_xAppConfModel.XExeMode is EXExeMode.PARTIAL_LOCAL)
+            rmqPassword = "xpwd";
+        
+        await ms_xRabbitMQManager
+            .PubAllXAccountCredModelsAsync(
+                in_xAccountCredModels: ps_xAppAccountCredConfModel.XTestAccounts,
+                in_xConnFactory: new ConnectionFactory
+                {
+                    HostName = rmqHostName,
+                    Port = rmqAMQPPort,
+                    UserName = rmqUsername,
+                    Password = rmqPassword,
+                    RequestedHeartbeat = TimeSpan.FromSeconds(200),
+                    NetworkRecoveryInterval = TimeSpan.FromSeconds(5),
+                    AutomaticRecoveryEnabled = true
+                });
+    }
+    
     private static async Task ms_PowerUpXPlwPowerSourceAsync()
     {
         ms_xPlwSingleCoreCableModel = await ms_xPlwEngineer.GenXPlwSingleCoreCableModelAsync();
@@ -156,12 +183,22 @@ internal abstract partial class AXTATestFoundation
     
     private static async Task ms_PowerUpXRabbitMQServerAsync()
     {
-        if (ps_xAppConfModel.XExeMode is EXExeMode.LOCAL)
+        switch (ps_xAppConfModel.XExeMode)
         {
-            ms_xRabbitMQServiceManager = XSingletonFactory.s_DaVinci(() 
-                => new XWindowsServiceManager(m_RABBIT_MQ_SERVICE_NAME));
+            case EXExeMode.COMPLETE_LOCAL:
+                
+                ms_xRabbitMQServiceManager = XSingletonFactory.s_DaVinci(() 
+                    => new XWindowsServiceManager(m_RABBIT_MQ_SERVICE_NAME));
+                await ms_xRabbitMQServiceManager.EnsureServiceIsRunningAsync();
+                
+                break;
             
-            await ms_xRabbitMQServiceManager.EnsureServiceIsRunningAsync();
+            // Client to manually ensure the self-hosted RabbitMQ Server is running.
+            case EXExeMode.PARTIAL_LOCAL:      
+                break;
+            
+            default:
+                throw new XExecutionModeNotSupported("The execution mode is not supported, please try a different one.      ");
         }
     }
     

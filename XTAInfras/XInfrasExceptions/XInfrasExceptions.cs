@@ -83,3 +83,10 @@ public class XRabbitMQConnectionMetNullException : XInfrasExceptions
     public XRabbitMQConnectionMetNullException(string in_message) : base(in_message) {}
     public XRabbitMQConnectionMetNullException(string in_message, Exception in_innerException) : base(in_message) {}
 }
+
+public class XExecutionModeNotSupported : XInfrasExceptions
+{
+    public XExecutionModeNotSupported() {}
+    public XExecutionModeNotSupported(string in_message) : base(in_message) {}
+    public XExecutionModeNotSupported(string in_message, Exception in_innerException) : base(in_message) {}
+}

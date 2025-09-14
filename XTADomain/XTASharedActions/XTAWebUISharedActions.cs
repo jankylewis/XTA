@@ -1,6 +1,4 @@
 using Microsoft.Playwright;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace XTADomain.XTASharedActions;
 
@@ -22,13 +20,8 @@ public class XTAWebUISharedActions
 
     internal async Task<List<ILocator>> GetListOfLocatorsAsync(IPage in_xPage, string in_selector)
     {
-        ILocator baseLocator = in_xPage.Locator(in_selector);
-        int elementCount = await baseLocator.CountAsync();
-
-        return Enumerable
-            .Range(0, elementCount)
-            .Select(a_elementIdx => baseLocator.Nth(a_elementIdx))
-            .ToList();
+        IReadOnlyList<ILocator> selectors = await in_xPage.Locator(in_selector).AllAsync();
+        return selectors.ToList();
     }
     
     internal async Task ReloadPageAsync(IPage in_xPage, PageReloadOptions? in_pageReloadOptions = default)

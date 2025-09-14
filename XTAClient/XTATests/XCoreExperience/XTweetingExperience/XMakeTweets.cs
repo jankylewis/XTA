@@ -8,14 +8,14 @@ using XTADomain.XTASharedActions;
 using XTAInfras.XInfrasExceptions;
 using XTAInfras.XTestCircle;
 
-namespace XTAClient.XTATests.XCoreExperience;
+namespace XTAClient.XTATests.XCoreExperience.XTweetingExperience;
 
 #region XTweetingTests > Class level
 
 [Parallelizable(ParallelScope.Children)]
 [FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 [TestFixture]
-internal class XTweetingTests : AXTATestFoundation
+internal class XMakeTweets : AXTATestFoundation
 {
     #region Introduce class vars
 

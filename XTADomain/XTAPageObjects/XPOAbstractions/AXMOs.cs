@@ -19,5 +19,8 @@ public abstract class AXMOs
     internal String LBL_HEADING 
         => pr_xPOSharedUtils.BuildSelector("modal-header", ELocatingMechanism.ID);
 
+    internal String BTN_ONTO_SHEET_DIALOG(String in_buttonText)
+        => pr_xPOSharedUtils.BuildSelector($"//div[@data-testid='sheetDialog'][//span[text()= '{in_buttonText}']]", ELocatingMechanism.XPATH);
+
     #endregion Introduce shared elements
 }

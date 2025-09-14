@@ -10,9 +10,27 @@ public class XTAWebUISharedVerifiers
     internal async Task VerifyIfTextContentMatchedAsync(IPage in_xPage, string in_selector, string in_expectedText) 
         => (await in_xPage.TextContentAsync(in_selector)).Should().Be(in_expectedText);
 
+    internal async Task VerifyIfElementAttributeMatchedAsync(
+        IPage in_xPage, string in_selector, string in_attributeName, string in_expectedAttribute)
+        => (await in_xPage.GetAttributeAsync(selector: in_selector, name: in_attributeName))
+            .Should()
+            .Be(in_expectedAttribute);
+
+    internal async Task VerifyIfElementAttributeMatchedAsync(
+        ILocator in_selector, string in_attributeName, string in_expectedAttribute)
+        => (await in_selector.GetAttributeAsync(in_attributeName))
+            .Should()
+            .Be(in_expectedAttribute);
+    
     internal async Task VerifyIfElementIsVisibleWithoutWaitsAsync(IPage in_xPage, string in_selector) 
         => (await in_xPage.IsVisibleAsync(in_selector)).Should().Be(true);
+    
+    internal async Task VerifyIfElementIsNotVisibleWithoutWaitsAsync(IPage in_xPage, string in_selector)
+        => (await in_xPage.IsVisibleAsync(in_selector)).Should().Be(false);
 
+    internal async Task VerifyIfElementIsNotVisibleWithWaitsAsync(IPage in_xPage, string in_selector)
+        => await Expect(in_xPage.Locator(in_selector)).Not.ToBeVisibleAsync();
+    
     internal async Task VerifyIfElementIsVisibleWithWaitsAsync(
         IPage in_xPage, string in_selector, LocatorAssertionsToBeVisibleOptions? in_locatorAssertionsToBeVisibleOpts = default) 
             => await Expect(in_xPage.Locator(in_selector))
